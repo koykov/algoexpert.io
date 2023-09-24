@@ -169,12 +169,6 @@ func TestIsValidSubsequence(t *testing.T) {
 				t.FailNow()
 			}
 		})
-		t.Run(fmt.Sprintf("unsafe/%d", i), func(t *testing.T) {
-			v := IsValidSubsequenceUnsafe(stage.array, stage.sequence)
-			if v != stage.valid {
-				t.FailNow()
-			}
-		})
 	}
 }
 
@@ -191,12 +185,6 @@ func BenchmarkIsValidSubsequence(b *testing.B) {
 			IsValidSubsequenceOptimized(stage.array, stage.sequence)
 		}
 	})
-	b.Run("unsafe", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			stage := &stages[i%len(stages)]
-			IsValidSubsequenceUnsafe(stage.array, stage.sequence)
-		}
-	})
 	b.Run("long/trivial", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			stage := &stages[len(stages)-1]
@@ -207,12 +195,6 @@ func BenchmarkIsValidSubsequence(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			stage := &stages[len(stages)-1]
 			IsValidSubsequenceOptimized(stage.array, stage.sequence)
-		}
-	})
-	b.Run("long/unsafe", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			stage := &stages[len(stages)-1]
-			IsValidSubsequenceUnsafe(stage.array, stage.sequence)
 		}
 	})
 }
