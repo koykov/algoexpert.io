@@ -16,7 +16,7 @@ func IsValidSubsequenceUnsafe(array []int, sequence []int) bool {
 	a, s := a2b(array, sz), a2b(sequence, sz)
 	_, _ = a[len(a)-1], s[len(s)-1]
 	for {
-		p := bytes.Index(a, s[:sz])
+		p := bytes.Index(a, s[:sz]) // AVX required
 		if p == -1 {
 			return false
 		}
