@@ -6,9 +6,8 @@ func IsValidSubsequenceOptimized(array []int, sequence []int) bool {
 		return false
 	}
 
-	// BCE optimization
-	_ = sequence[ls-1]
-	for i := la - 1; i >= 0; i-- {
+	_ = sequence[ls-1]             // first BCE optimization
+	for i := la - 1; i >= 0; i-- { // second BCE optimization (loop from end)
 		if array[i] == sequence[ls-1] {
 			if sequence = sequence[:ls-1]; len(sequence) == 0 {
 				return true
