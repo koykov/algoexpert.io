@@ -129,6 +129,29 @@ var stages = []struct {
 		[]int{1, 6, -1, 5},
 		false,
 	},
+	// very-very long stage
+	{
+		[]int{
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+			5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10, 5, 1, 22, 25, 6, -1, 8, 10,
+		},
+		[]int{
+			1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10,
+			1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10,
+			1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10,
+			1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10,
+			1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10, 1, 6, -1, 10,
+		},
+		true,
+	},
 }
 
 func TestIsValidSubsequence(t *testing.T) {
@@ -136,6 +159,12 @@ func TestIsValidSubsequence(t *testing.T) {
 		stage := &stages[i]
 		t.Run(fmt.Sprintf("trivial/%d", i), func(t *testing.T) {
 			v := IsValidSubsequence(stage.array, stage.sequence)
+			if v != stage.valid {
+				t.FailNow()
+			}
+		})
+		t.Run(fmt.Sprintf("optimized/%d", i), func(t *testing.T) {
+			v := IsValidSubsequenceOptimized(stage.array, stage.sequence)
 			if v != stage.valid {
 				t.FailNow()
 			}
@@ -148,6 +177,24 @@ func BenchmarkIsValidSubsequence(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			stage := &stages[i%len(stages)]
 			IsValidSubsequence(stage.array, stage.sequence)
+		}
+	})
+	b.Run("optimized", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			stage := &stages[i%len(stages)]
+			IsValidSubsequenceOptimized(stage.array, stage.sequence)
+		}
+	})
+	b.Run("long/trivial", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			stage := &stages[len(stages)-1]
+			IsValidSubsequence(stage.array, stage.sequence)
+		}
+	})
+	b.Run("long/optimized", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			stage := &stages[len(stages)-1]
+			IsValidSubsequenceOptimized(stage.array, stage.sequence)
 		}
 	})
 }
