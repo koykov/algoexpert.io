@@ -75,7 +75,7 @@ func TestNonConstructibleChange(t *testing.T) {
 	}
 }
 
-func BenchmarkSortedSquaredArray(b *testing.B) {
+func BenchmarkNonConstructibleChange(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		stage := &stages[i%len(stages)]
