@@ -140,7 +140,6 @@ func TestSelectionSort(t *testing.T) {
 			r := SelectionSort(stg.array)
 			rv, ev := fmt.Sprintf("%#v", r), fmt.Sprintf("%#v", stg.expect)
 			if rv != ev {
-				t.Log(r)
 				t.FailNow()
 			}
 		})

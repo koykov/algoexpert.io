@@ -140,7 +140,6 @@ func TestBubbleSort(t *testing.T) {
 			r := BubbleSort(stg.array)
 			rv, ev := fmt.Sprintf("%#v", r), fmt.Sprintf("%#v", stg.expect)
 			if rv != ev {
-				t.Log(r)
 				t.FailNow()
 			}
 		})
