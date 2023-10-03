@@ -67,7 +67,6 @@ func TestSmallestDifference(t *testing.T) {
 			stg := &stages[i]
 			r := SmallestDifference(stg.a1, stg.a2)
 			if r[0] != stg.expect[0] || r[1] != stg.expect[1] {
-				println(r[0], r[1])
 				t.FailNow()
 			}
 		})
