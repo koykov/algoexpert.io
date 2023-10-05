@@ -124,8 +124,6 @@ func TestSpiralTraverse(t *testing.T) {
 			stg := &stages[i]
 			r := SpiralTraverse(stg.matrix)
 			if fmt.Sprintf("%#v", r) != fmt.Sprintf("%#v", stg.expect) {
-				t.Log(fmt.Sprintf("%#v", r))
-				t.Log(fmt.Sprintf("%#v", stg.expect))
 				t.FailNow()
 			}
 		})
