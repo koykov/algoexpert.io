@@ -61,8 +61,6 @@ func TestArrayOfProducts(t *testing.T) {
 			stg := &stages[i]
 			r := ArrayOfProducts(stg.arr)
 			if fmt.Sprintf("%#v", r) != fmt.Sprintf("%#v", stg.expect) {
-				t.Log(fmt.Sprintf("%#v", r))
-				t.Log(fmt.Sprintf("%#v", stg.expect))
 				t.FailNow()
 			}
 		})
