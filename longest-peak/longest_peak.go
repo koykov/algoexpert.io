@@ -6,38 +6,36 @@ func LongestPeak(a []int) int {
 		return 0
 	}
 
-	l, lm, r, rm := 1, 0, 1, 0
-	_ = r
-	for i := 0; i < n-1; i++ {
-		if i < n-1 {
-			switch {
-			case a[i+1]-a[i] >= 0:
-				l++
-			case a[i+1]-a[i] < 0:
-				if l >= 2 && (i > 0 && a[i] != a[i-1]) {
-					lm = max(lm, l+1)
-				}
-				l = 1
-				// case a[i+1]-a[i] == 0:
-				// 	l = 1
+	lp := 0
+	mode := true // true - increasing; false - decreasing
+	ln := 1
+	for i := 1; i < n-1; i++ {
+		switch {
+		case a[i-1] < a[i] && a[i] > a[i+1]:
+			mode = false
+			ln += 2
+			i += 2
+			if i == n-1 {
+				ln++
 			}
-		}
-		if i < n-1 {
-			r1, r2 := a[n-i-1], a[n-i-2]
-			switch {
-			case r2-r1 >= 0:
-				r++
-			case r2-r1 < 0:
-				if r >= 3 {
-					rm = max(rm, r+1)
-				}
-				r = 1
-				// case r2-r1 == 0:
-				// 	r = 1
+			if i == n-2 && a[i-1] > a[i] {
+				ln++
 			}
+		case a[i-1] < a[i] && mode:
+			ln++
+		case a[i-1] >= a[i] && mode:
+			ln = 1
+		case a[i] > a[i+1] && !mode:
+			ln++
+		case a[i] <= a[i+1] && !mode:
+			lp = max(lp, ln)
+			ln = 1
 		}
 	}
-	return max(lm, rm)
+	if mode {
+		return 0
+	}
+	return max(lp, ln)
 }
 
 func max(a, b int) int {
