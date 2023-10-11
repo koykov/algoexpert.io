@@ -30,6 +30,7 @@ func LongestPeak(a []int) int {
 		case a[i] <= a[i+1] && !mode:
 			lp = max(lp, ln)
 			ln = 1
+			mode = true
 		}
 	}
 	if mode {
