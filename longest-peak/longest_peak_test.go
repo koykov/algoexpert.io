@@ -1,7 +1,6 @@
 package longest_peak
 
 import (
-	"fmt"
 	"strconv"
 	"testing"
 )
@@ -70,7 +69,6 @@ func TestLongestPeak(t *testing.T) {
 			stg := &stages[i]
 			r := LongestPeak(stg.arr)
 			if r != stg.expect {
-				println(r, stg.expect, fmt.Sprintf("%#v", stg.arr))
 				t.FailNow()
 			}
 		})
