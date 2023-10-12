@@ -1,7 +1,6 @@
 package first_duplicate_value
 
 import (
-	"fmt"
 	"strconv"
 	"testing"
 )
@@ -270,7 +269,6 @@ func TestFirstDuplicateValue(t *testing.T) {
 			stg := &stages[i]
 			r := FirstDuplicateValue(stg.arr)
 			if r != stg.expect {
-				println(r, stg.expect, fmt.Sprintf("%#v", stg.arr))
 				t.FailNow()
 			}
 		})
