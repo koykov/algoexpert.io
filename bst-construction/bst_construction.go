@@ -25,16 +25,21 @@ func (tree *BST) Contains(value int) bool {
 }
 
 func (tree *BST) Remove(value int) *BST {
-	return remove(tree, value)
+	root := remove(tree, value)
+	if root == nil {
+		return nil
+	}
+	*tree = *root
+	return tree
 }
 
 func insert(x *BST, value int) *BST {
 	if x == nil {
 		x = &BST{Value: value}
 	} else if value < x.Value {
-		insert(x.Left, value)
-	} else if value > x.Value {
-		insert(x.Right, value)
+		x.Left = insert(x.Left, value)
+	} else if value >= x.Value {
+		x.Right = insert(x.Right, value)
 	}
 	return x
 }
@@ -49,16 +54,29 @@ func remove(x *BST, value int) *BST {
 	case value > x.Value:
 		x.Right = remove(x.Right, value)
 	case x.Left != nil && x.Right != nil:
-		x.Value = x.Right.Value
+		x.Value = minimum(x.Right).Value
 		x.Right = remove(x.Right, x.Value)
 	default:
-		if x.Left != nil {
+		switch {
+		case x.Left != nil:
 			x = x.Left
-		} else if x.Right != nil {
+		case x.Right != nil:
 			x = x.Right
-		} else {
+		default:
 			x = nil
 		}
 	}
 	return x
+}
+
+func minimum(root *BST) *BST {
+	switch {
+	case root.Left == nil && root.Right == nil:
+		return root
+	case root.Left == nil && root.Right != nil:
+		return minimum(root.Right)
+	case root.Left != nil:
+		return minimum(root.Left)
+	}
+	return root
 }
