@@ -172,7 +172,6 @@ func TestBinaryTree(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := BinaryTreeDiameter(stg.bst)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})
