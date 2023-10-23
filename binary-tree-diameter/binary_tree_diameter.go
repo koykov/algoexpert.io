@@ -7,24 +7,23 @@ type BinaryTree struct {
 	Right *BinaryTree
 }
 
-func BinaryTreeDiameter(tree *BinaryTree) (r int) {
-	var c int
-	walk(tree, &c, &r)
-	return r
+func BinaryTreeDiameter(tree *BinaryTree) (d int) {
+	walk(tree, &d)
+	return
 }
 
-func walk(tree *BinaryTree, c, r *int) {
-	if tree.Left == nil && tree.Right == nil {
-		if *r < *c {
-			*r = *c
-		}
-		*c = 0
-		return
+func walk(root *BinaryTree, d *int) int {
+	if root == nil {
+		return 0
 	}
-	if tree.Left != nil {
-		walk(tree.Left, c, r)
+	lh, rh := walk(root.Left, d), walk(root.Right, d)
+	*d = max(*d, lh+rh)
+	return max(lh, rh) + 1
+}
+
+func max(a, b int) int {
+	if b > a {
+		return b
 	}
-	if tree.Right != nil {
-		walk(tree.Right, c, r)
-	}
+	return a
 }
