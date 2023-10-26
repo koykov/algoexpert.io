@@ -85,7 +85,6 @@ func TestBinaryTree(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := FindSuccessor(stg.tree, stg.node__)
 			if r.Value != stg.expect {
-				println(r.Value)
 				t.FailNow()
 			}
 		})
