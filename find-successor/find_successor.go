@@ -9,34 +9,37 @@ type BinaryTree struct {
 }
 
 func FindSuccessor(tree *BinaryTree, node *BinaryTree) *BinaryTree {
-	var edge bool
+	var ctl int
 	var r *BinaryTree
-	r = walk(tree, node.Value, &edge, r)
+	r = walk(tree, node.Value, &ctl, r)
 	return r
 }
 
-func walk(tree *BinaryTree, value int, edge *bool, r *BinaryTree) *BinaryTree {
-	if *edge {
-		if r == nil {
-			r = tree
-		}
+func walk(tree *BinaryTree, value int, ctl *int, r *BinaryTree) *BinaryTree {
+	if tree.Left != nil {
+		r = walk(tree.Left, value, ctl, r)
+	}
+	if *ctl == -1 && r == nil {
+		r = tree
 		return r
 	}
-	if tree.Left != nil {
-		r = walk(tree.Left, value, edge, r)
+	if *ctl == 1 && r != nil {
+		return r
+	}
+	if *ctl == 1 && tree.Left == nil {
+		r = tree
+		return r
 	}
 	if tree.Value == value {
-		*edge = true
 		if tree.Right != nil {
-			r = tree.Right
+			*ctl = 1
+		} else {
+			*ctl = -1
+			return r
 		}
-		return r
-	}
-	if *edge && r == nil {
-		r = tree
 	}
 	if tree.Right != nil {
-		r = walk(tree.Right, value, edge, r)
+		r = walk(tree.Right, value, ctl, r)
 	}
 	return r
 }
