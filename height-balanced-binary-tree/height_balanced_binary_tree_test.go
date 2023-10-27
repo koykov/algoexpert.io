@@ -60,7 +60,6 @@ func TestBinaryTree(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := HeightBalancedBinaryTree(stg.tree)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})
