@@ -1,4 +1,4 @@
-package symmetrical_tree
+package split_binary_tree
 
 import (
 	"strconv"
@@ -14,20 +14,21 @@ type node struct {
 
 var stages = []struct {
 	nodes  []node
-	expect bool
+	expect int
 	tree   *BinaryTree
 }{
 	{
 		nodes: []node{
-			{id: "1", left: "2", right: "2-2", value: 1},
-			{id: "2", left: "3", right: "3-2", value: 2},
-			{id: "2-2", left: "3-3", right: "3-4", value: 2},
-			{id: "3", left: "", right: "", value: 3},
-			{id: "3-2", left: "", right: "", value: 4},
-			{id: "3-3", left: "", right: "", value: 4},
-			{id: "3-4", left: "", right: "", value: 3},
+			{id: "1", left: "3", right: "-2", value: 1},
+			{id: "3", left: "6", right: "-5", value: 3},
+			{id: "6", left: "2", right: "", value: 6},
+			{id: "2", left: "", right: "", value: 2},
+			{id: "-5", left: "", right: "", value: -5},
+			{id: "-2", left: "5", right: "2", value: -2},
+			{id: "5", left: "", right: "", value: 5},
+			{id: "2-1", left: "", right: "", value: 2},
 		},
-		expect: true,
+		expect: 6,
 	},
 }
 
@@ -41,8 +42,9 @@ func TestBinaryTree(t *testing.T) {
 	for i := 0; i < len(stages); i++ {
 		stg := &stages[i]
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
-			r := SymmetricalTree(stg.tree)
+			r := SplitBinaryTree(stg.tree)
 			if r != stg.expect {
+				println(r)
 				t.FailNow()
 			}
 		})
@@ -53,7 +55,7 @@ func BenchmarkBinaryTree(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		stg := &stages[i%len(stages)]
-		SymmetricalTree(stg.tree)
+		SplitBinaryTree(stg.tree)
 	}
 }
 
