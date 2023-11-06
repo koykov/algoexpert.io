@@ -10,11 +10,11 @@ var stages = []struct {
 	n      int
 	expect int
 }{
-	// {
-	// 	arr:    []int{1, 5, 10},
-	// 	n:      7,
-	// 	expect: 3,
-	// },
+	{
+		arr:    []int{1, 5, 10},
+		n:      7,
+		expect: 3,
+	},
 	{
 		arr:    []int{2, 1},
 		n:      3,
@@ -28,7 +28,6 @@ func TestMinNumberOfCoinsForChange(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := MinNumberOfCoinsForChange(stg.n, stg.arr)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})
