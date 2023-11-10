@@ -1,33 +1,30 @@
 package union_find
 
-import "math/rand"
-
-const maxN = 1e6
-
 type UnionFind struct {
-	p []int
+	p map[int]*int
 }
 
 func NewUnionFind() *UnionFind {
-	return &UnionFind{p: make([]int, maxN)}
+	return &UnionFind{p: make(map[int]*int)}
 }
 
 func (dsu *UnionFind) CreateSet(v int) {
-	dsu.p[v] = v
+	dsu.p[v] = &v
 }
 
 func (dsu *UnionFind) Find(v int) *int {
-	if dsu.p[v] == v {
-		return &dsu.p[v]
-	}
-	dsu.p[v] = *dsu.Find(dsu.p[v])
-	return &dsu.p[v]
+	return dsu.p[v]
 }
 
 func (dsu *UnionFind) Union(a, b int) {
 	ai, bi := dsu.Find(a), dsu.Find(b)
-	if rand.Int()%2 == 0 {
-		ai, bi = bi, ai
+	if ai == nil || bi == nil {
+		return
 	}
-	dsu.p[*ai] = *bi
+	for k, v := range dsu.p {
+		if dsu.p[b] == v && k != b {
+			dsu.p[k] = dsu.p[a]
+		}
+	}
+	dsu.p[b] = dsu.p[a]
 }

@@ -14,62 +14,64 @@ type scall struct {
 var stages = []struct {
 	calls []scall
 }{
-	// {
-	// 	calls: []scall{
-	// 		{
-	// 			args:   []int{0},
-	// 			method: "find",
-	// 		},
-	// 		{
-	// 			args:   []int{1},
-	// 			method: "find",
-	// 		},
-	// 	},
-	// },
-	// {
-	// 	calls: []scall{
-	// 		{
-	// 			args:   []int{0},
-	// 			method: "find",
-	// 		},
-	// 		{
-	// 			args:   []int{1},
-	// 			method: "find",
-	// 		},
-	// 		{
-	// 			args:   []int{0, 1},
-	// 			method: "union",
-	// 		},
-	// 		{
-	// 			args:   []int{0},
-	// 			method: "find",
-	// 		},
-	// 		{
-	// 			args:   []int{1},
-	// 			method: "find",
-	// 		},
-	// 	},
-	// },
-	// {
-	// 	calls: []scall{
-	// 		{
-	// 			args:   []int{0},
-	// 			method: "createSet",
-	// 		},
-	// 		{
-	// 			args:   []int{1},
-	// 			method: "createSet",
-	// 		},
-	// 		{
-	// 			args:   []int{0},
-	// 			method: "find",
-	// 		},
-	// 		{
-	// 			args:   []int{1},
-	// 			method: "find",
-	// 		},
-	// 	},
-	// },
+	{
+		calls: []scall{
+			{
+				args:   []int{0},
+				method: "find",
+			},
+			{
+				args:   []int{1},
+				method: "find",
+			},
+		},
+	},
+	{
+		calls: []scall{
+			{
+				args:   []int{0},
+				method: "find",
+			},
+			{
+				args:   []int{1},
+				method: "find",
+			},
+			{
+				args:   []int{0, 1},
+				method: "union",
+			},
+			{
+				args:   []int{0},
+				method: "find",
+			},
+			{
+				args:   []int{1},
+				method: "find",
+			},
+		},
+	},
+	{
+		calls: []scall{
+			{
+				args:   []int{0},
+				method: "createSet",
+			},
+			{
+				args:   []int{1},
+				method: "createSet",
+			},
+			{
+				args:   []int{0},
+				method: "find",
+				expect: 0,
+			},
+			{
+				args:   []int{1},
+				method: "find",
+				expect: 1,
+			},
+		},
+	},
 	{
 		calls: []scall{
 			{
@@ -83,10 +85,12 @@ var stages = []struct {
 			{
 				args:   []int{10},
 				method: "find",
+				expect: 10,
 			},
 			{
 				args:   []int{5},
 				method: "find",
+				expect: 5,
 			},
 			{
 				args:   []int{10, 5},
@@ -95,10 +99,84 @@ var stages = []struct {
 			{
 				args:   []int{10},
 				method: "find",
+				expect: 10,
 			},
 			{
 				args:   []int{5},
 				method: "find",
+				expect: 10,
+			},
+		},
+	},
+	{
+		calls: []scall{
+			{
+				args:   []int{0},
+				method: "createSet",
+			},
+			{
+				args:   []int{2},
+				method: "createSet",
+			},
+			{
+				args:   []int{0, 2},
+				method: "union",
+			},
+			{
+				args:   []int{3},
+				method: "createSet",
+			},
+			{
+				args:   []int{1},
+				method: "createSet",
+			},
+			{
+				args:   []int{1, 3},
+				method: "union",
+			},
+			{
+				args:   []int{0},
+				method: "find",
+				expect: 0,
+			},
+			{
+				args:   []int{1},
+				method: "find",
+				expect: 1,
+			},
+			{
+				args:   []int{2},
+				method: "find",
+				expect: 0,
+			},
+			{
+				args:   []int{3},
+				method: "find",
+				expect: 1,
+			},
+			{
+				args:   []int{3, 0},
+				method: "union",
+			},
+			{
+				args:   []int{0},
+				method: "find",
+				expect: 1,
+			},
+			{
+				args:   []int{1},
+				method: "find",
+				expect: 1,
+			},
+			{
+				args:   []int{2},
+				method: "find",
+				expect: 1,
+			},
+			{
+				args:   []int{3},
+				method: "find",
+				expect: 1,
 			},
 		},
 	},
@@ -117,20 +195,14 @@ func TestStableInternships(t *testing.T) {
 					dsu.Union(stg.calls[j].args[0], stg.calls[j].args[1])
 				case "find":
 					x := dsu.Find(stg.calls[j].args[0])
-					println(*x)
+					if x == nil {
+						continue
+					}
 					if *x != stg.calls[j].expect {
-						// t.FailNow()
+						t.FailNow()
 					}
 				}
 			}
 		})
 	}
-}
-
-func BenchmarkStableInternships(b *testing.B) {
-	// b.ReportAllocs()
-	// for i := 0; i < b.N; i++ {
-	// 	stg := &stages[i%len(stages)]
-	// 	StableInternships(stg.interns, stg.teams)
-	// }
 }
