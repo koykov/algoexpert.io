@@ -42,7 +42,7 @@ func rmark(m [][]int, x, y, o, n int) {
 	if x+1 < len(m) && m[x+1][y] == o {
 		rmark(m, x+1, y, o, n)
 	}
-	if y+1 < len(m) && m[x][y+1] == o {
+	if y+1 < len(m[x]) && m[x][y+1] == o {
 		rmark(m, x, y+1, o, n)
 	}
 	if x > 0 && m[x-1][y] == o {
