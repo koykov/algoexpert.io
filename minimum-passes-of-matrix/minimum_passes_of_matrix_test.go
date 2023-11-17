@@ -34,7 +34,6 @@ func TestRemoveIslands(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := MinimumPassesOfMatrix(stg.m)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})
