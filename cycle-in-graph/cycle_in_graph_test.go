@@ -9,24 +9,24 @@ var stages = []struct {
 	g      [][]int
 	expect bool
 }{
-	// {
-	// 	g: [][]int{
-	// 		{1, 3},
-	// 		{2, 3, 4},
-	// 		{0},
-	// 		{},
-	// 		{2, 5},
-	// 		{},
-	// 	},
-	// 	expect: true,
-	// },
-	// {
-	// 	g: [][]int{
-	// 		{1, 2},
-	// 		{2},
-	// 		{},
-	// 	},
-	// },
+	{
+		g: [][]int{
+			{1, 3},
+			{2, 3, 4},
+			{0},
+			{},
+			{2, 5},
+			{},
+		},
+		expect: true,
+	},
+	{
+		g: [][]int{
+			{1, 2},
+			{2},
+			{},
+		},
+	},
 	{
 		g: [][]int{
 			{},
@@ -48,5 +48,13 @@ func TestCycleInGraph(t *testing.T) {
 				t.FailNow()
 			}
 		})
+	}
+}
+
+func BenchmarkCycleInGraph(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		stg := &stages[i%len(stages)]
+		CycleInGraph(stg.g)
 	}
 }
