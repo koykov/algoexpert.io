@@ -28,7 +28,7 @@ var stages = []struct {
 	},
 }
 
-func TestRemoveIslands(t *testing.T) {
+func TestMinimumPassesOfMatrix(t *testing.T) {
 	for i := 0; i < len(stages); i++ {
 		stg := &stages[i]
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
@@ -40,7 +40,7 @@ func TestRemoveIslands(t *testing.T) {
 	}
 }
 
-func BenchmarkRemoveIslands(b *testing.B) {
+func BenchmarkMinimumPassesOfMatrix(b *testing.B) {
 	b.ReportAllocs()
 	for i := 0; i < b.N; i++ {
 		stg := stages[i%len(stages)]

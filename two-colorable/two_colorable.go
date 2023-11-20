@@ -4,20 +4,25 @@ func TwoColorable(g [][]int) (ok bool) {
 	a := make(map[int]int, 100)
 	for i := 0; i < len(g); i++ {
 		if _, ok_ := a[i]; !ok_ {
-			dfs(i, 1, g, a, &ok)
+			ok = dfs(i, 1, g, a)
+		}
+		if !ok {
+			return
 		}
 	}
-	return
+	return true
 }
 
-func dfs(v, c int, g [][]int, a map[int]int, r *bool) {
+func dfs(v, c int, g [][]int, a map[int]int) bool {
+	if c1, ok := a[v]; ok {
+		return c1 == c
+	}
 	a[v] = c
 	for i := 0; i < len(g[v]); i++ {
 		u := g[v][i]
-		if _, ok := a[u]; !ok {
-			dfs(u, -c, g, a, r)
-		} else if a[u] != -c {
-			*r = true
+		if !dfs(u, -c, g, a) {
+			return false
 		}
 	}
+	return true
 }

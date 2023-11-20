@@ -10,6 +10,47 @@ var stages = []struct {
 	expect bool
 }{
 	{
+		g:      [][]int{{1}, {0}},
+		expect: true,
+	},
+	{g: [][]int{{0}}},
+	{
+		g: [][]int{
+			{1},
+			{0, 2},
+			{1},
+		},
+		expect: true,
+	},
+	{
+		g: [][]int{
+			{1, 2, 3},
+			{0},
+			{0},
+			{0},
+		},
+		expect: true,
+	},
+	{
+		g: [][]int{
+			{2},
+			{2, 3},
+			{0, 1},
+			{1},
+		},
+		expect: true,
+	},
+	{
+		g: [][]int{
+			{1, 4},
+			{0, 2, 3},
+			{1, 4},
+			{1},
+			{0, 2},
+		},
+		expect: true,
+	},
+	{
 		g: [][]int{
 			{1, 2},
 			{0, 2},
@@ -28,5 +69,13 @@ func TestTwoColorable(t *testing.T) {
 				t.FailNow()
 			}
 		})
+	}
+}
+
+func BenchmarkTwoColorable(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		stg := stages[i%len(stages)]
+		TwoColorable(stg.g)
 	}
 }
