@@ -66,7 +66,6 @@ func TestBST(t *testing.T) {
 			tree := ReconstructBst(stg.arr)
 			r := tree.Marshal()
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})

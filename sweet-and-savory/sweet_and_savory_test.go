@@ -29,7 +29,6 @@ func TestSweetAndSavory(t *testing.T) {
 			stg := &stages[i]
 			r := SweetAndSavory(stg.arr, stg.target)
 			if fmt.Sprintf("%#v", r) != fmt.Sprintf("%#v", stg.expect) {
-				println(r)
 				t.FailNow()
 			}
 		})

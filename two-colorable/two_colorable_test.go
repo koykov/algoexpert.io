@@ -65,7 +65,6 @@ func TestTwoColorable(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := TwoColorable(stg.g)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})

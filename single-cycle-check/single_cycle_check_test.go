@@ -29,7 +29,6 @@ func TestSingleCycleCheck(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := HasSingleCycle(stg.a)
 			if r != stg.expect {
-				println(r)
 				t.FailNow()
 			}
 		})

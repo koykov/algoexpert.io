@@ -48,7 +48,6 @@ func TestStableInternships(t *testing.T) {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			r := StableInternships(stg.interns, stg.teams)
 			if fmt.Sprintf("%v", r) != fmt.Sprintf("%v", stg.expect) {
-				println(fmt.Sprintf("%v", r))
 				t.FailNow()
 			}
 		})
