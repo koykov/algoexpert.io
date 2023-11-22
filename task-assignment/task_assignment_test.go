@@ -30,7 +30,6 @@ func TestTaskAssignment(t *testing.T) {
 			rf := fmt.Sprintf("%v", r)
 			ef := fmt.Sprintf("%v", stg.expect)
 			if rf != ef {
-				println(rf)
 				t.FailNow()
 			}
 		})
