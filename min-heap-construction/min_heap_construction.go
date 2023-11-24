@@ -9,7 +9,10 @@ func NewMinHeap(array []int) *MinHeap {
 	return ptr
 }
 
-func (h *MinHeap) BuildHeap(array []int) {
+func (h *MinHeap) BuildHeap(a []int) {
+	for i := len(a) - 1; i >= 0; i-- {
+		h.siftDown()
+	}
 }
 
 func (h *MinHeap) siftDown(currentIndex, endIndex int) {
@@ -19,11 +22,36 @@ func (h *MinHeap) siftUp() {
 }
 
 func (h MinHeap) Peek() int {
+	if len(h) > 0 {
+		return h[0]
+	}
 	return -1
 }
 
 func (h *MinHeap) Remove() int {
-	return -1
+	n := len(*h)
+	if n == 0 {
+		return -1
+	}
+	v, idx := (*h)[0], 0
+	(*h)[idx] = (*h)[n-1]
+	*h = (*h)[:n-1]
+	for {
+		l, r, i := 2*idx+1, 2*idx+2, idx
+		switch {
+		case l < n && (*h)[l] < (*h)[i]:
+			i = l
+		case r < n && (*h)[r] < (*h)[i]:
+			i = r
+		case i != idx:
+			(*h)[idx], (*h)[i] = (*h)[i], (*h)[idx]
+			idx = i
+		default:
+			goto exit
+		}
+	}
+exit:
+	return v
 }
 
 func (h *MinHeap) Insert(value int) {
