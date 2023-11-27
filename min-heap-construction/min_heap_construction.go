@@ -11,14 +11,38 @@ func NewMinHeap(array []int) *MinHeap {
 
 func (h *MinHeap) BuildHeap(a []int) {
 	for i := len(a) - 1; i >= 0; i-- {
-		h.siftDown()
+		h.siftDown(i, len(a)-1)
 	}
 }
 
-func (h *MinHeap) siftDown(currentIndex, endIndex int) {
+func (h *MinHeap) siftDown(c, e int) {
+	l := c*2 + 1
+	if l > e {
+		return
+	}
+	r := l + 1
+	s := r
+	if r > e || (*h)[l] < (*h)[r] {
+		s = l
+	}
+	if (*h)[s] < (*h)[c] {
+		(*h)[s], (*h)[c] = (*h)[c], (*h)[s]
+		c = s
+		h.siftDown(c, e)
+	}
 }
 
 func (h *MinHeap) siftUp() {
+	n := len(*h) - 1
+	if n <= 0 {
+		return
+	}
+	p := (n - 1) / 2
+	for p >= 0 && (*h)[n] < (*h)[p] {
+		(*h)[n], (*h)[p] = (*h)[p], (*h)[n]
+		n = p
+		p = (n - 1) / 2
+	}
 }
 
 func (h MinHeap) Peek() int {
@@ -36,29 +60,12 @@ func (h *MinHeap) Remove() int {
 	v, idx := (*h)[0], 0
 	(*h)[idx] = (*h)[n-1]
 	*h = (*h)[:n-1]
-	for {
-		l, r, i := 2*idx+1, 2*idx+2, idx
-		switch {
-		case l < n && (*h)[l] < (*h)[i]:
-			i = l
-		case r < n && (*h)[r] < (*h)[i]:
-			i = r
-		case i != idx:
-			(*h)[idx], (*h)[i] = (*h)[i], (*h)[idx]
-			idx = i
-		default:
-			goto exit
-		}
-	}
-exit:
+	h.siftDown(0, n-1)
 	return v
 }
 
 func (h *MinHeap) Insert(value int) {
 	*h = append(*h, value)
-	n := len(*h) - 1
-	for n > 0 && (*h)[(n-1)/2] > (*h)[n] {
-		(*h)[n], (*h)[(n-1)/2] = (*h)[(n-1)/2], (*h)[n]
-		n = (n - 1) / 2
-	}
+	h.siftUp()
+	return
 }
