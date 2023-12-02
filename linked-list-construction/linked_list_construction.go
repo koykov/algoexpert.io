@@ -16,96 +16,114 @@ func NewDoublyLinkedList() *DoublyLinkedList {
 }
 
 func (l *DoublyLinkedList) SetHead(node *Node) {
-	pn := l.Head
-	for {
-		if pn = pn.Next; pn == nil || pn.Value == node.Value {
-			break
-		}
-	}
-	if pn == nil {
-		node.Next = l.Head
-		l.Head = node
+	if l.Head == nil {
+		l.Head, l.Tail = node, node
 		return
 	}
-	oh := l.Head
-	l.Head = pn
-	t := pn.Prev
-	pn.Prev.Next = pn.Next
-	pn.Next.Prev = t
-	l.Head.Prev = nil
-	l.Head.Next = oh
+	l.InsertBefore(l.Head, node)
 }
 
 func (l *DoublyLinkedList) SetTail(node *Node) {
-	pn := l.Head
-	for {
-		if pn = pn.Next; pn == nil || pn.Value == node.Value {
-			break
-		}
-	}
-	if pn == nil {
-		node.Prev = l.Tail
-		l.Tail.Next = node
-		l.Tail = node
+	if l.Head == nil {
+		l.SetHead(node)
 		return
 	}
-	ot := l.Tail
-	l.Tail = pn
-	t := pn.Prev
-	pn.Prev.Next = pn.Next
-	pn.Next.Prev = t
-	l.Tail.Prev = nil
-	l.Tail.Next = ot
+	l.InsertAfter(l.Tail, node)
 }
 
 func (l *DoublyLinkedList) InsertBefore(node, node1 *Node) {
-	pn := l.Head
-	for {
-		if pn = pn.Next; pn == nil || pn.Value == node.Value {
-			break
-		}
-	}
-	if pn == nil {
+	if node1.Value == l.Head.Value && node1.Value == l.Tail.Value {
 		return
 	}
-	node1.Prev, node1.Next = pn.Prev, pn
-	pn.Prev.Next = node1
-	pn.Prev = node1
+	l.Remove(node1)
+	node1.Next, node1.Prev = node, node.Prev
+	if node.Prev == nil {
+		l.Head, node.Prev = node1, node1
+		return
+	}
+	node.Prev.Next, node.Prev = node1, node1
 }
 
 func (l *DoublyLinkedList) InsertAfter(node, node1 *Node) {
-	pn := l.Head
-	for {
-		if pn = pn.Next; pn == nil || pn.Value == node.Value {
-			break
-		}
-	}
-	if pn == nil {
+	if node1.Value == l.Head.Value && node1.Value == l.Tail.Value {
 		return
 	}
-	node1.Prev, node1.Next = pn, pn.Next
-	pn.Next = node1
+	node1.Prev, node1.Next = node, node.Next
+	if node.Next == nil {
+		l.Tail, node.Next = node1, node1
+		return
+	}
+	node.Prev.Next, node.Next = node1, node1
 }
 
-func (l *DoublyLinkedList) InsertAtPosition(p int, node *Node) {
-	pn := l.Head
-	for i := 0; i < p; i++ {
-		if pn = pn.Next; pn == nil {
-			return
+func (l *DoublyLinkedList) InsertAtPosition(p int, node1 *Node) {
+	if p == 1 {
+		l.SetHead(node1)
+		return
+	}
+	node := l.Head
+	p_ := 1
+	for {
+		if node == nil && p_ != p {
+			node = node.Next
+			p_++
+			continue
+		}
+		break
+	}
+	if node == nil {
+		l.SetTail(node1)
+	}
+	l.InsertBefore(node, node1)
+}
+
+func (l *DoublyLinkedList) RemoveNodesWithValue(v int) {
+	if !l.ContainsNodeWithValue(v) {
+		return
+	}
+	node := l.Head
+	for {
+		if node != nil {
+			node1 := node
+			node = node.Next
+			if node1.Value == v {
+				l.Remove(node1)
+			}
 		}
 	}
-	node.Prev, node.Next = pn.Prev, pn
-	pn.Prev.Next = node
-}
-
-func (l *DoublyLinkedList) RemoveNodesWithValue(value int) {
 }
 
 func (l *DoublyLinkedList) Remove(node *Node) {
+	switch {
+	case node.Value == l.Head.Value:
+		l.Head = l.Head.Next
+	case node.Value == l.Tail.Value:
+		l.Tail = l.Tail.Prev
+	default:
+		l.cleanup(node)
+	}
 }
 
-func (l *DoublyLinkedList) ContainsNodeWithValue(value int) bool {
-	return false
+func (l *DoublyLinkedList) cleanup(node *Node) {
+	if node.Prev != nil {
+		node.Prev.Next = node.Next
+	}
+	if node.Next != nil {
+		node.Next.Prev = node.Prev
+	}
+	node.Next, node.Prev = nil, nil
+}
+
+func (l *DoublyLinkedList) ContainsNodeWithValue(v int) bool {
+	node := l.Head
+	for {
+		if node == nil && node.Value != v {
+			node = node.Next
+			continue
+		}
+		break
+	}
+	return node != nil
 }
 
 func (l *DoublyLinkedList) String() (r string) {
