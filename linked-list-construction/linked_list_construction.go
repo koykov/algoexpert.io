@@ -41,7 +41,8 @@ func (l *DoublyLinkedList) InsertBefore(node, node1 *Node) {
 		l.Head, node.Prev = node1, node1
 		return
 	}
-	node.Prev.Next, node.Prev = node1, node1
+	node.Prev.Next = node1
+	node.Prev = node1
 }
 
 func (l *DoublyLinkedList) InsertAfter(node, node1 *Node) {
@@ -53,7 +54,8 @@ func (l *DoublyLinkedList) InsertAfter(node, node1 *Node) {
 		l.Tail, node.Next = node1, node1
 		return
 	}
-	node.Prev.Next, node.Next = node1, node1
+	node.Next.Prev = node1
+	node.Next = node1
 }
 
 func (l *DoublyLinkedList) InsertAtPosition(p int, node1 *Node) {
@@ -99,9 +101,8 @@ func (l *DoublyLinkedList) Remove(node *Node) {
 		l.Head = l.Head.Next
 	case node.Value == l.Tail.Value:
 		l.Tail = l.Tail.Prev
-	default:
-		l.cleanup(node)
 	}
+	l.cleanup(node)
 }
 
 func (l *DoublyLinkedList) cleanup(node *Node) {
