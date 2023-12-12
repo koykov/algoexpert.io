@@ -25,6 +25,9 @@ func dive(b [][]string, x, y int) [][]string {
 	c += hasm(b, x+1, y)
 	c += hasm(b, x+1, y+1)
 	b[x][y] = d[c]
+	if c > 0 {
+		return b
+	}
 	b = dive(b, x-1, y-1)
 	b = dive(b, x-1, y)
 	b = dive(b, x-1, y+1)
