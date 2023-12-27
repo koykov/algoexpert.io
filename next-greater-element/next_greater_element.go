@@ -1,41 +1,25 @@
 package next_greater_element
 
-import "math"
-
 func NextGreaterElement(a []int) []int {
 	n := len(a)
 	r := make([]int, n)
 	for i := 0; i < n; i++ {
 		r[i] = -1
 	}
-
 	stk := make([]int, 0, len(a))
-	mx := -math.MaxInt
-	for i := 0; i < len(a); i++ {
-		if mx < a[i] {
-			mx = a[i]
+	for i := n - 1; i >= 0; i-- {
+		stk = append(stk, a[i])
+	}
+	for i := n - 1; i >= 0; i-- {
+		for len(stk) > 0 && stk[len(stk)-1] <= a[i] {
+			stk = stk[:len(stk)-1]
 		}
 		if len(stk) == 0 {
-			stk = append(stk, i)
+			stk = append(stk, a[i])
 			continue
 		}
-		si := stk[len(stk)-1]
-		if a[i] > a[si] {
-			for j := len(stk) - 1; j >= 0; j-- {
-				r[stk[j]] = a[i]
-			}
-			stk = stk[:0]
-			stk = append(stk, i)
-			continue
-		} else {
-			stk = append(stk, i)
-		}
-	}
-	for i := len(stk) - 1; i >= 0; i-- {
-		if a[stk[i]] == mx {
-			continue
-		}
-		r[stk[i]] = r[0]
+		r[i] = stk[len(stk)-1]
+		stk = append(stk, a[i])
 	}
 	return r
 }
