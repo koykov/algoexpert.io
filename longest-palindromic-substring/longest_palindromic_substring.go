@@ -5,33 +5,23 @@ func LongestPalindromicSubstring(s string) string {
 	if n < 2 {
 		return s
 	}
-	var (
-		mp string
-		ml int
-	)
-	for i := 0; i < n; i++ {
-		l, r := i, i
-		if r < n-1 && s[i] == s[i+1] {
-			r++
-		}
-		for l > 0 && r < n-1 {
+	var l, r int
+	f := func(s string, l, r int) (int, int) {
+		for l >= 0 && r < len(s) && s[l] == s[r] {
 			l--
 			r++
-			if s[l] != s[r] {
-				break
-			}
 		}
-		ds := s[l : r+1]
-		if len(ds) > 1 && ds[0] != ds[len(ds)-1] {
-			ds = ds[1 : len(ds)-1]
+		return l + 1, r
+	}
+	for i := 0; i < n; i++ {
+		ol, or := f(s, i, i)
+		el, er := f(s, i, i+1)
+		if d := or - ol; d > r-l {
+			l, r = ol, or
 		}
-		if len(ds) > ml {
-			ml = len(ds)
-			mp = s[l : r+1]
+		if d := er - el; d > r-l {
+			l, r = el, er
 		}
 	}
-	if len(mp) > 1 && mp[0] != mp[len(mp)-1] {
-		mp = mp[1 : len(mp)-1]
-	}
-	return mp
+	return s[l:r]
 }
