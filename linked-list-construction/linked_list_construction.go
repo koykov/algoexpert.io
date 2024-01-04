@@ -1,7 +1,5 @@
 package linked_list_construction
 
-import "strconv"
-
 type Node struct {
 	Value      int
 	Prev, Next *Node
@@ -15,128 +13,111 @@ func NewDoublyLinkedList() *DoublyLinkedList {
 	return &DoublyLinkedList{}
 }
 
-func (l *DoublyLinkedList) SetHead(node *Node) {
-	if l.Head == nil {
-		l.Head, l.Tail = node, node
+func (ll *DoublyLinkedList) SetHead(node *Node) {
+	if ll.Head == nil {
+		ll.Head = node
+		ll.Tail = node
 		return
 	}
-	l.InsertBefore(l.Head, node)
+
+	ll.InsertBefore(ll.Head, node)
 }
 
-func (l *DoublyLinkedList) SetTail(node *Node) {
-	if l.Head == nil {
-		l.SetHead(node)
+func (ll *DoublyLinkedList) SetTail(node *Node) {
+	if ll.Tail == nil {
+		ll.Head = node
+		ll.Tail = node
 		return
 	}
-	l.InsertAfter(l.Tail, node)
+
+	ll.InsertAfter(ll.Tail, node)
 }
 
-func (l *DoublyLinkedList) InsertBefore(node, node1 *Node) {
-	if node1.Value == l.Head.Value && node1.Value == l.Tail.Value {
+func (ll *DoublyLinkedList) InsertBefore(node, nodeToInsert *Node) {
+	if nodeToInsert == node || nodeToInsert.Next == node {
 		return
 	}
-	l.Remove(node1)
-	node1.Next, node1.Prev = node, node.Prev
-	if node.Prev == nil {
-		l.Head, node.Prev = node1, node1
-		return
+	ll.Remove(nodeToInsert)
+
+	if node == ll.Head {
+		ll.Head = nodeToInsert
+	} else {
+		node.Prev.Next = nodeToInsert
 	}
-	node.Prev.Next = node1
-	node.Prev = node1
+
+	nodeToInsert.Prev = node.Prev
+	nodeToInsert.Next = node
+	node.Prev = nodeToInsert
 }
 
-func (l *DoublyLinkedList) InsertAfter(node, node1 *Node) {
-	if node1.Value == l.Head.Value && node1.Value == l.Tail.Value {
+func (ll *DoublyLinkedList) InsertAfter(node, nodeToInsert *Node) {
+	if nodeToInsert == node || nodeToInsert.Prev == node {
 		return
 	}
-	node1.Prev, node1.Next = node, node.Next
-	if node.Next == nil {
-		l.Tail, node.Next = node1, node1
-		return
+	ll.Remove(nodeToInsert)
+
+	if node == ll.Tail {
+		ll.Tail = nodeToInsert
+	} else {
+		node.Next.Prev = nodeToInsert
 	}
-	node.Next.Prev = node1
-	node.Next = node1
+
+	nodeToInsert.Next = node.Next
+	nodeToInsert.Prev = node
+	node.Next = nodeToInsert
 }
 
-func (l *DoublyLinkedList) InsertAtPosition(p int, node1 *Node) {
-	if p == 1 {
-		l.SetHead(node1)
+func (ll *DoublyLinkedList) InsertAtPosition(position int, nodeToInsert *Node) {
+	if position == 1 {
+		ll.SetHead(nodeToInsert)
 		return
 	}
-	node := l.Head
-	p_ := 1
-	for {
-		if node == nil && p_ != p {
-			node = node.Next
-			p_++
-			continue
+
+	current := ll.Head
+	for i := 2; i < position; i++ {
+		current = current.Next
+	}
+	ll.InsertAfter(current, nodeToInsert)
+}
+
+func (ll *DoublyLinkedList) RemoveNodesWithValue(value int) {
+	current := ll.Head
+
+	for current != nil {
+		tempNext := current.Next
+		if current.Value == value {
+			ll.Remove(current)
 		}
-		break
-	}
-	if node == nil {
-		l.SetTail(node1)
-	}
-	l.InsertBefore(node, node1)
-}
-
-func (l *DoublyLinkedList) RemoveNodesWithValue(v int) {
-	if !l.ContainsNodeWithValue(v) {
-		return
-	}
-	node := l.Head
-	for {
-		if node != nil {
-			node1 := node
-			node = node.Next
-			if node1.Value == v {
-				l.Remove(node1)
-			}
-		}
+		current = tempNext
 	}
 }
 
-func (l *DoublyLinkedList) Remove(node *Node) {
-	switch {
-	case node.Value == l.Head.Value:
-		l.Head = l.Head.Next
-	case node.Value == l.Tail.Value:
-		l.Tail = l.Tail.Prev
+func (ll *DoublyLinkedList) Remove(node *Node) {
+	if node == ll.Head {
+		ll.Head = ll.Head.Next
 	}
-	l.cleanup(node)
-}
-
-func (l *DoublyLinkedList) cleanup(node *Node) {
 	if node.Prev != nil {
 		node.Prev.Next = node.Next
+	}
+
+	if node == ll.Tail {
+		ll.Tail = ll.Tail.Prev
 	}
 	if node.Next != nil {
 		node.Next.Prev = node.Prev
 	}
-	node.Next, node.Prev = nil, nil
+
+	node.Prev = nil
+	node.Next = nil
 }
 
-func (l *DoublyLinkedList) ContainsNodeWithValue(v int) bool {
-	node := l.Head
-	for {
-		if node == nil && node.Value != v {
-			node = node.Next
-			continue
+func (ll *DoublyLinkedList) ContainsNodeWithValue(value int) bool {
+	current := ll.Head
+	for current != nil {
+		if current.Value == value {
+			return true
 		}
-		break
+		current = current.Next
 	}
-	return node != nil
-}
-
-func (l *DoublyLinkedList) String() (r string) {
-	r += strconv.Itoa(l.Head.Value)
-	n := l.Head
-	for {
-		n = n.Next
-		if n == nil {
-			break
-		}
-		r += " <-> "
-		r += strconv.Itoa(n.Value)
-	}
-	return
+	return false
 }
