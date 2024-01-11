@@ -28,15 +28,30 @@ func TrieFromString(str string) SuffixTrie {
 }
 
 func TestNewSuffixTrie(t *testing.T) {
-	trie := TrieFromString("babc")
-	expected := SuffixTrie{
-		'c': {'*': nil},
-		'b': {
+	t.Run("babc", func(t *testing.T) {
+		trie := TrieFromString("babc")
+		expected := SuffixTrie{
 			'c': {'*': nil},
+			'b': {
+				'c': {'*': nil},
+				'a': {'b': {'c': {'*': nil}}},
+			},
 			'a': {'b': {'c': {'*': nil}}},
-		},
-		'a': {'b': {'c': {'*': nil}}},
-	}
-	require.True(t, trie.Equals(expected))
-	require.True(t, trie.Contains("abc"))
+		}
+		require.True(t, trie.Equals(expected))
+		require.True(t, trie.Contains("abc"))
+	})
+	t.Run("1234556789", func(t *testing.T) {
+		trie := TrieFromString("1234556789")
+		expected := SuffixTrie{
+			'c': {'*': nil},
+			'b': {
+				'c': {'*': nil},
+				'a': {'b': {'c': {'*': nil}}},
+			},
+			'a': {'b': {'c': {'*': nil}}},
+		}
+		require.True(t, trie.Equals(expected))
+		require.True(t, trie.Contains("abc"))
+	})
 }
