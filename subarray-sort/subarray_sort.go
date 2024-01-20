@@ -1,63 +1,42 @@
 package subarray_sort
 
-import "math"
-
 func SubarraySort(a []int) []int {
 	res := [2]int{-1, -1}
-
 	n := len(a)
-	if n == 2 {
-		if a[0] > a[1] {
-			res[0], res[1] = 0, 1
-		}
+	l, r := 0, n-1
+	for ; l < n-1 && a[l] <= a[l+1]; l++ {
+	}
+	for ; r > 0 && a[r] >= a[r-1] && r > l; r-- {
+	}
+	if l >= r {
 		return res[:]
 	}
 
-	l, r := -1, -1
-	for i := 1; i < n; i++ {
-		if a[i] < a[i-1] {
-			l = i
-			break
-		}
+	li, ri := l, r
+	mn, mx := a[l], a[l]
+	for l <= r {
+		mn = min(mn, a[l])
+		mx = max(mx, a[l])
+		l++
 	}
-	if l < 0 {
-		return res[:]
+	for ; li >= 0 && a[li] > mn; li-- {
 	}
-
-	rm := a[l]
-	for i := l - 1; i < n; i++ {
-		if a[i] > rm {
-			rm = a[i]
-			continue
-		}
-		r = i
+	for ; ri < n && a[ri] < mx; ri++ {
 	}
-	if r == -1 {
-		return res[:]
-	}
-
-	mn, mx := math.MaxInt, -math.MaxInt
-	for i := l; i <= r; i++ {
-		if mn > a[i] {
-			mn = a[i]
-		}
-		if mx < a[i] {
-			mx = a[i]
-		}
-	}
-
-	for i := 0; i < n; i++ {
-		if a[i] > mn {
-			l = i
-			break
-		}
-	}
-	for i := n - 1; i >= 0; i-- {
-		if a[i] < mx {
-			r = i
-			break
-		}
-	}
-	res[0], res[1] = l, r
+	res[0], res[1] = li+1, ri-1
 	return res[:]
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
