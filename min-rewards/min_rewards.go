@@ -5,23 +5,26 @@ func MinRewards(s []int) int {
 	if n == 1 {
 		return 1
 	}
+	var r int
 	w := make([]int, n)
-	off := -1
 	for i := 0; i < n; i++ {
 		if inflectLow(s, i) {
-			r := 2
 			w[i] = 1
-			for j := i - 1; j > off; j-- {
-				w[j] = r
-				r++
+			r = 2
+			if i > 0 && w[i-1] < r {
+				for j := i - 1; j >= 0; j-- {
+					w[j] = r
+					r++
+					if inflectHigh(s, j) {
+						break
+					}
+				}
 			}
-			off = i
 
 			r = 2
 			for j := i + 1; j < n; j++ {
 				w[j] = r
 				r++
-				off++
 				i++
 				if inflectHigh(s, j) {
 					break
@@ -29,7 +32,7 @@ func MinRewards(s []int) int {
 			}
 		}
 	}
-	var r int
+	r = 0
 	for i := 0; i < n; i++ {
 		r += w[i]
 	}
