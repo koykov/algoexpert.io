@@ -2,6 +2,9 @@ package min_rewards
 
 func MinRewards(s []int) int {
 	n := len(s)
+	if n == 1 {
+		return 1
+	}
 	w := make([]int, n)
 	off := -1
 	for i := 0; i < n; i++ {
