@@ -14,6 +14,10 @@ func LongestSubarrayWithSum(a []int, t int) []int {
 			if hi-lo > h-l {
 				l, h = lo, hi
 			}
+			if i < len(a)-1 && a[i+1] == 0 {
+				hi++
+				continue
+			}
 			s -= a[lo]
 			lo++
 		case s > t:
