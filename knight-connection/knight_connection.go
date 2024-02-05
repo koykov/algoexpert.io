@@ -8,7 +8,7 @@ func KnightConnection(a []int, b []int) int {
 }
 
 func walk(px, py, cx, cy, tx, ty int) float64 {
-	if cx < -8 || cx > 8 || cy < -8 || cy > 8 || (cx == px && cy == py) {
+	if cx == px && cy == py {
 		return 1000 // infinity
 	}
 	switch {
