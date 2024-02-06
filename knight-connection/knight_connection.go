@@ -3,35 +3,38 @@ package knight_connection
 import "math"
 
 func KnightConnection(a []int, b []int) int {
-	v := walk(-8, 8, a[0], a[1], b[0], b[1])
+	var x, y int
+	if x, y = abs(a[0]-b[0]), abs(a[1]-b[1]); x+y == 1 {
+		return 2
+	}
+	v := float64(move(x, y))
 	return int(math.Ceil(v / 2))
 }
 
-func walk(px, py, cx, cy, tx, ty int) float64 {
-	if cx == px && cy == py {
-		return 1000 // infinity
-	}
-	switch {
-	case cx == tx && cy == ty:
+func move(x, y int) int {
+	if x <= 0 && y <= 0 {
 		return 0
-	case cx-2 == tx && cy+1 == ty,
-		cx-1 == tx && cy+2 == ty,
-		cx+1 == tx && cy+2 == ty,
-		cx+2 == tx && cy+1 == ty,
-		cx+2 == tx && cy-1 == ty,
-		cx+1 == tx && cy-2 == ty,
-		cx-1 == tx && cy-2 == ty,
-		cx-2 == tx && cy-1 == ty:
-		return 1
 	}
-	min := float64(1000) // infinity
-	min = math.Min(min, walk(cx, cy, cx-2, cy+1, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx-1, cy+2, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx+1, cy+2, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx+2, cy+1, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx+2, cy-1, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx+1, cy-2, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx-1, cy-2, tx, ty))
-	min = math.Min(min, walk(cx, cy, cx-2, cy-1, tx, ty))
-	return min + 1
+	return move(max(x, y)-2, min(x, y)-1) + 1
+}
+
+func abs(i int) int {
+	if i < 0 {
+		return -i
+	}
+	return i
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
