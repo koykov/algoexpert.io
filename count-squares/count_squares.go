@@ -1,29 +1,26 @@
 package count_squares
 
-import "math"
-
-func CountSquares(p [][]int) int {
-	type adjd struct {
-		idx  int
-		dist float64
-	}
-
-	n := len(p)
-	if n < 4 {
-		return 0
-	}
-	adj := make(map[int][]adjd, len(p))
-	for i := 0; i < n; i++ {
-		for j := 0; j < n; j++ {
+func CountSquares(p [][]int) (c int) {
+	reg := make(map[int]bool, len(p))
+	var x1, x2, y1, y2, x1_, x2_, y1_, y2_, xm, ym, dx, dy int
+	for i := 0; i < len(p); i++ {
+		x1, y1 = (p[i][0]+100)*2, (p[i][1]+100)*2
+		for j := 0; j < len(p); j++ {
 			if i == j {
 				continue
 			}
-			adj[i] = append(adj[i], adjd{idx: j, dist: dist(p[i], p[j])})
-		}
-	}
-	return -1
-}
+			x2, y2 = (p[j][0]+100)*2, (p[j][1]+100)+2
+			xm, ym = (x1+x2)/2, (y1+y2)/2
+			dx, dy = x1-xm, y1-ym
+			x1_, y1_ = xm-dy, ym+dx
+			x2_, y2_ = xm+dy, ym-dx
 
-func dist(a, b []int) float64 {
-	return math.Sqrt(math.Pow(float64(b[0]-a[0]), 2) + math.Pow(float64(b[1]-a[1]), 2))
+			k1, k2 := x1_<<32+y1_, x2_<<32+y2_
+			if reg[k1] && reg[k2] {
+				c++
+			}
+		}
+		reg[x1<<32+y1] = true
+	}
+	return
 }
