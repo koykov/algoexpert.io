@@ -13,10 +13,10 @@ func TestCountSquares(t *testing.T) {
 		actual := CountSquares(input)
 		require.Equal(t, expected, actual)
 	})
-	// t.Run("1", func(t *testing.T) {
-	// 	input := [][]int{{1, 1}, {0, 0}, {0, 1}, {1, 0}}
-	// 	expected := 1
-	// 	actual := CountSquares(input)
-	// 	require.Equal(t, expected, actual)
-	// })
+	t.Run("1", func(t *testing.T) {
+		input := [][]int{{1, 1}, {0, 0}, {0, 1}, {1, 0}}
+		expected := 1
+		actual := CountSquares(input)
+		require.Equal(t, expected, actual)
+	})
 }
