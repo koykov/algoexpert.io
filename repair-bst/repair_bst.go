@@ -8,31 +8,39 @@ type BST struct {
 }
 
 func RepairBst(tree *BST) *BST {
-	_, lnode, _ := walk(tree.Value, tree, tree.Left, true)
-	_, rnode, _ := walk(tree.Value, tree, tree.Right, false)
+	lnode, lok := walk(tree.Value, tree.Left, true)
+	rnode, rok := walk(tree.Value, tree.Right, false)
 
-	lnode.Value, rnode.Value = rnode.Value, lnode.Value
+	if lok && rok {
+		lnode.Value, rnode.Value = rnode.Value, lnode.Value
+	}
 	return tree
 }
 
-func walk(rv int, root, node *BST, less bool) (*BST, *BST, bool) {
+func walk(rv int, node *BST, less bool) (*BST, bool) {
 	if node == nil {
-		return root, node, false
+		return node, false
 	}
 	if less {
 		if node.Value > rv {
-			return root, node, true
+			return node, true
 		}
 	} else {
 		if node.Value < rv {
-			return root, node, true
+			return node, true
 		}
 	}
-	if rr, rn, ok := walk(rv, node, node.Left, true); ok {
-		return rr, rn, ok
+	lnode, lok := walk(rv, node.Left, true)
+	rnode, rok := walk(rv, node.Right, false)
+	if lok && rok {
+		lnode.Value, rnode.Value = rnode.Value, lnode.Value
+		return node, false
 	}
-	if rr, rn, ok := walk(rv, node, node.Right, false); ok {
-		return rr, rn, ok
+	if lok {
+		return lnode, true
 	}
-	return root, node, false
+	if rok {
+		return rnode, true
+	}
+	return node, false
 }
