@@ -8,39 +8,24 @@ type BST struct {
 }
 
 func RepairBst(tree *BST) *BST {
-	lnode, lok := walk(tree.Value, tree.Left, true)
-	rnode, rok := walk(tree.Value, tree.Right, false)
-
-	if lok && rok {
-		lnode.Value, rnode.Value = rnode.Value, lnode.Value
-	}
+	var n1, n2, np *BST
+	n1, n2, np = walk(tree, n1, n2, np)
+	n1.Value, n2.Value = n2.Value, n1.Value
 	return tree
 }
 
-func walk(rv int, node *BST, less bool) (*BST, bool) {
-	if node == nil {
-		return node, false
+func walk(root, n1, n2, np *BST) (*BST, *BST, *BST) {
+	if root == nil {
+		return n1, n2, np
 	}
-	if less {
-		if node.Value > rv {
-			return node, true
+	n1, n2, np = walk(root.Left, n1, n2, np)
+	if np != nil && np.Value > root.Value {
+		if n1 == nil {
+			n1 = np
 		}
-	} else {
-		if node.Value < rv {
-			return node, true
-		}
+		n2 = root
 	}
-	lnode, lok := walk(rv, node.Left, true)
-	rnode, rok := walk(rv, node.Right, false)
-	if lok && rok {
-		lnode.Value, rnode.Value = rnode.Value, lnode.Value
-		return node, false
-	}
-	if lok {
-		return lnode, true
-	}
-	if rok {
-		return rnode, true
-	}
-	return node, false
+	np = root
+	n1, n2, np = walk(root.Right, n1, n2, np)
+	return n1, n2, np
 }
