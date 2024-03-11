@@ -31,6 +31,7 @@ func sumOf(buf []int, tree *BinaryTree) ([]int, int) {
 	var l, r int
 	buf, l = sumOf(buf, tree.Left)
 	buf, r = sumOf(buf, tree.Right)
+	buf = append(buf, l+r+tree.Value)
 	if l > r {
 		buf = append(buf, l+tree.Value)
 		return buf, l + tree.Value
