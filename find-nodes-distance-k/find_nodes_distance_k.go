@@ -7,19 +7,51 @@ type BinaryTree struct {
 	Right *BinaryTree
 }
 
-func FindNodesDistanceK(tree *BinaryTree, target int, k int) []int {
+func FindNodesDistanceK(tree *BinaryTree, target int, k int) (dst []int) {
 	p := make(map[int]*BinaryTree)
-	makep(p, tree, nil)
-	return nil
+	v := make(map[int]struct{})
+	tnode := makep(p, tree, nil, target)
+	if tnode == nil {
+		return
+	}
+	dst = []int{}
+	dst = walk(dst, p, v, tnode, k)
+	return
 }
 
-func makep(dst map[int]*BinaryTree, tree *BinaryTree, p *BinaryTree) {
-	if tree == nil {
+func makep(dst map[int]*BinaryTree, node *BinaryTree, p *BinaryTree, target int) (tnode *BinaryTree) {
+	if node == nil {
 		return
 	}
 	if p != nil {
-		dst[tree.Value] = p
+		dst[node.Value] = p
 	}
-	makep(dst, tree.Left, tree)
-	makep(dst, tree.Right, tree)
+	if node.Value == target {
+		tnode = node
+	}
+	if tnl := makep(dst, node.Left, node, target); tnl != nil {
+		tnode = tnl
+	}
+	if tnr := makep(dst, node.Right, node, target); tnr != nil {
+		tnode = tnr
+	}
+	return
+}
+
+func walk(dst []int, p map[int]*BinaryTree, v map[int]struct{}, node *BinaryTree, k int) []int {
+	if node == nil {
+		return dst
+	}
+	if _, ok := v[node.Value]; ok {
+		return dst
+	}
+	if k == 0 {
+		dst = append(dst, node.Value)
+		return dst
+	}
+	v[node.Value] = struct{}{}
+	dst = walk(dst, p, v, node.Left, k-1)
+	dst = walk(dst, p, v, node.Right, k-1)
+	dst = walk(dst, p, v, p[node.Value], k-1)
+	return dst
 }
