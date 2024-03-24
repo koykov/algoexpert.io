@@ -9,10 +9,9 @@ func MaxSumIncreasingSubsequence(a []int) (int, []int) {
 	ms = -math.MaxInt
 	// backward check
 	for i := n - 1; i >= 0; i-- {
-		buf = append(buf, a[i])
-		c := a[i]
-		s = c
-		for j := i - 1; j >= 0; j-- {
+		c := math.MaxInt
+		s = 0
+		for j := i; j >= 0; j-- {
 			if a[j] < c {
 				buf = append(buf, a[j])
 				c = a[j]
