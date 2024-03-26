@@ -4,48 +4,42 @@ import "math"
 
 func MaxSumIncreasingSubsequence(a []int) (int, []int) {
 	n := len(a)
-	buf := make([]int, 0, n*2)
-	var s, ms, off int
-	ms = -math.MaxInt
-	// backward check
-	for i := n - 1; i >= 0; i-- {
-		c := math.MaxInt
-		s = 0
-		for j := i; j >= 0; j-- {
-			if a[j] < c {
-				buf = append(buf, a[j])
-				c = a[j]
-				s += c
-			}
-		}
-		if s > ms {
-			ms = s
-			copy(buf[0:], buf[off:])
-			off = len(buf) - off
-		}
-		buf = buf[:off]
-	}
-	for i := 0; i < len(buf)/2; i++ {
-		buf[i], buf[len(buf)-i-1] = buf[len(buf)-i-1], buf[i]
+	buf, sum := make([]int, n), make([]int, n)
+	for i := 0; i < n; i++ {
+		buf[i] = math.MaxInt
+		sum[i] = a[i]
 	}
 
-	// forward check
-	for i := 0; i < n; i++ {
-		c := -math.MaxInt
-		s = 0
-		for j := i; j < n; j++ {
-			if a[j] > c {
-				buf = append(buf, a[j])
-				c = a[j]
-				s += c
+	for i := 1; i < n; i++ {
+		for j := 0; j < i; j++ {
+			if a[i] > a[j] {
+				if x := sum[j] + a[i]; x > sum[i] {
+					sum[i] = x
+					buf[i] = j
+				}
 			}
 		}
-		if s > ms {
-			ms = s
-			copy(buf[0:], buf[off:])
-			off = len(buf) - off
-		}
-		buf = buf[:off]
 	}
-	return ms, buf
+
+	x, p := math.MinInt, 0
+	for i := 0; i < n; i++ {
+		if sum[i] > x {
+			x = sum[i]
+		}
+		if x == sum[i] {
+			p = i
+		}
+	}
+
+	res := sum[:0]
+	for p != math.MaxInt {
+		res = append(res, a[p])
+		p = buf[p]
+	}
+
+	for i := 0; i < len(res)/2; i++ {
+		res[i], res[len(res)-i-1] = res[len(res)-i-1], res[i]
+	}
+
+	return x, res
 }
