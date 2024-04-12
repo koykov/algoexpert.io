@@ -4,10 +4,11 @@ func WaterArea(h []int) (a int) {
 	if len(h) == 0 {
 		return 0
 	}
-	mx := 0
+	mx, mxi := 0, 0
 	for i := 0; i < len(h); i++ {
 		if h[i] > mx {
 			mx = h[i]
+			mxi = i
 		}
 	}
 
@@ -24,7 +25,7 @@ func WaterArea(h []int) (a int) {
 	}
 
 	cx = 0
-	for i := len(h) - 1; h[i] < mx; i-- {
+	for i := len(h) - 1; i > mxi; i-- {
 		if h[i] > cx {
 			cx = h[i]
 			continue
