@@ -15,28 +15,28 @@ func KnapsackProblem(itm [][]int, c int) []interface{} {
 			}
 		}
 	}
-	buf, w := walk(nil, a, itm, len(itm), c)
 	return []interface{}{
-		w,
-		buf,
+		a[len(a)-1][c],
+		walk1(a, itm),
 	}
 }
 
-func walk(dst []int, a, itm [][]int, k, s int) ([]int, int) {
-	var wo int
-	if a[k][s] == 0 {
-		return dst, wo
+func walk1(a, itm [][]int) (r []int) {
+	r = []int{}
+	i, j := len(a)-1, len(a[0])-1
+	for i > 0 {
+		if a[i][j] > a[i-1][j] {
+			c := i - 1
+			w := itm[c][1]
+			r = append(r, c)
+			j = j - w
+		}
+		i--
 	}
-	if a[k-1][s] == a[k][s] {
-		dst, wo = walk(dst, a, itm, k-1, s)
-	} else {
-		var wi int
-		w := itm[k-1][1]
-		dst, wi = walk(dst, a, itm, k-1, s-w)
-		dst = append(dst, k-1)
-		wo = w + wi
+	for i = 0; i < len(r)/2; i++ {
+		r[i], r[len(r)-i-1] = r[len(r)-i-1], r[i]
 	}
-	return dst, wo
+	return
 }
 
 func max(a, b int) int {
@@ -44,13 +44,4 @@ func max(a, b int) int {
 		return a
 	}
 	return b
-}
-
-func print_(a [][]int) {
-	for i := 0; i < len(a); i++ {
-		for j := 0; j < len(a[i]); j++ {
-			print(a[i][j], " ")
-		}
-		print("\n")
-	}
 }
