@@ -40,13 +40,3 @@ func MaximumSumSubmatrix(m [][]int, sz int) int {
 	}
 	return mx
 }
-
-func prnt(m [][]int) {
-	for i := 0; i < len(m); i++ {
-		for j := 0; j < len(m[i]); j++ {
-			print(m[i][j], " ")
-		}
-		println()
-	}
-	println()
-}
