@@ -1,44 +1,34 @@
 package numbers_in_pi
 
-import (
-	"bytes"
-)
+import "math"
 
 func NumbersInPi(pi string, numbers []string) int {
-	n, m := len(pi), len(numbers)
-	x := make([][]byte, len(numbers))
-	for i := 0; i < m; i++ {
-		x[i] = append(x[i], pi...)
+	nr := make(map[string]struct{}, len(numbers))
+	for i := 0; i < len(numbers); i++ {
+		nr[numbers[i]] = struct{}{}
 	}
-	for i := 0; i < m; i++ {
-		nb := []byte(numbers[i])
-		for {
-			p := bytes.Index(x[i], nb)
-			if p == -1 {
-				break
-			}
-			for j := p; j < p+len(nb); j++ {
-				x[i][j] = 0
+	m := make([]int, len(pi)+1)
+	for i := len(pi) - 1; i >= 0; i-- {
+		var c string
+		a := math.MaxInt64
+		for j := i; j < len(pi); j++ {
+			c = c + string(pi[j])
+			if _, ok := nr[c]; ok {
+				a = min(a, m[j+1])
 			}
 		}
+		m[i] = a + 1
 	}
 
-	for i := 0; i < m; i++ {
-		println(string(x[i]))
+	if a := m[0]; a != math.MaxInt {
+		return a - 1
 	}
+	return -1
+}
 
-	var c int
-	for i := 0; i < n; i++ {
-		var s byte
-		for j := 0; j < m; j++ {
-			s += x[j][i]
-		}
-		if s > 0 {
-			c++
-		}
+func min(a, b int) int {
+	if a < b {
+		return a
 	}
-	if c == 0 {
-		return -1
-	}
-	return c
+	return b
 }
