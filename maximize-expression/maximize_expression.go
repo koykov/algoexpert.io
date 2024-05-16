@@ -1,37 +1,27 @@
 package maximize_expression
 
-const minInt = -1e9
-
 func MaximizeExpression(arr []int) int {
-	r := maxp(arr, 0, 2, 0)
-	if r <= minInt {
+	n := len(arr)
+	if n < 4 {
 		return 0
 	}
-	return r
-}
+	var m [5][]int
+	for i := 0; i < 5; i++ {
+		m[i] = make([]int, n+1)
+	}
 
-func maxp(a []int, i, k int, state int) (r int) {
-	if i >= len(a) {
-		return minInt
-	}
-	if k == 0 {
-		return 0
-	}
-	r = minInt
-	if state == 0 {
-		t := maxp(a, i+1, k, 1)
-		if t != minInt {
-			t = a[i] + maxp(a, i+1, k, 1)
+	sign := 1
+	for i := 1; i < 5; i++ {
+		for j := i; j < n+1; j++ {
+			if i == j {
+				m[i][j] = m[i-1][j-1] + sign*arr[j-1]
+			} else {
+				m[i][j] = max(m[i][j-1], m[i-1][j-1]+sign*arr[j-1])
+			}
 		}
-		r = max(r, max(maxp(a, i+1, k, 0), t))
-	} else {
-		t := maxp(a, i+1, k-1, 0)
-		if t != minInt {
-			t = -a[i] + maxp(a, i+1, k-1, 0)
-		}
-		r = max(r, max(maxp(a, i+1, k, 1), t))
+		sign *= -1
 	}
-	return
+	return m[4][n]
 }
 
 func max(a, b int) int {
