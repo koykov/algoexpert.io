@@ -12,7 +12,21 @@ func TestTopologicalSort(t *testing.T) {
 		}
 	})
 	t.Run("1", func(t *testing.T) {
-		//
+		jobs_ := jobs(8)
+		deps := []Dep{{3, 1},
+			{8, 1},
+			{8, 7},
+			{5, 7},
+			{5, 2},
+			{1, 4},
+			{6, 7},
+			{1, 2},
+			{7, 6},
+		}
+		order := TopologicalSort(jobs_, deps)
+		if !isValidTopologicalOrder(order, jobs_, deps) {
+			t.Fail()
+		}
 	})
 }
 

@@ -10,6 +10,7 @@ func TopologicalSort(jobs []int, deps []Dep) []int {
 		jobs:  jobs,
 		deps:  deps,
 		visit: make(map[int]bool),
+		idx:   make(map[int]int),
 	}
 	for i := 0; i < len(jobs); i++ {
 		if !sol.visit[jobs[i]] {
@@ -23,6 +24,8 @@ type solution struct {
 	jobs, stack []int
 	deps        []Dep
 	visit       map[int]bool
+	idx         map[int]int
+	cycle       bool
 }
 
 func (s *solution) dfs(v int) {
