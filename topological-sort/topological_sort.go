@@ -10,21 +10,23 @@ func TopologicalSort(jobs []int, deps []Dep) []int {
 		jobs:  jobs,
 		deps:  deps,
 		visit: make(map[int]bool),
-		idx:   make(map[int]int),
 	}
 	for i := 0; i < len(jobs); i++ {
 		if !sol.visit[jobs[i]] {
 			sol.dfs(jobs[i])
 		}
 	}
-	return sol.reverse()
+	sol.reverse()
+	if sol.valid() {
+		return sol.stack
+	}
+	return []int{}
 }
 
 type solution struct {
 	jobs, stack []int
 	deps        []Dep
 	visit       map[int]bool
-	idx         map[int]int
 	cycle       bool
 }
 
@@ -40,6 +42,26 @@ func (s *solution) dfs(v int) {
 		}
 	}
 	s.stack = append(s.stack, v)
+}
+
+func (s *solution) valid() bool {
+	for k := range s.visit {
+		delete(s.visit, k)
+	}
+	for _, candidate := range s.stack {
+		for _, dep := range s.deps {
+			if _, found := s.visit[dep.Job]; found && candidate == dep.Prereq {
+				return false
+			}
+		}
+		s.visit[candidate] = true
+	}
+	for _, job := range s.jobs {
+		if _, found := s.visit[job]; !found {
+			return false
+		}
+	}
+	return len(s.stack) == len(s.jobs)
 }
 
 func (s *solution) reverse() []int {
