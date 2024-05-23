@@ -3,34 +3,35 @@ package kruskals_algorithm
 import "sort"
 
 func KruskalsAlgorithm(edges [][][]int) [][][]int {
-	var cpy [][]int
+	var srt [][]int
 	for i := 0; i < len(edges); i++ {
 		v := edges[i]
 		for j := 0; j < len(v); j++ {
 			e := v[j]
 			if e[0] > i {
-				cpy = append(cpy, []int{i, e[0], e[1]})
+				srt = append(srt, []int{i, e[0], e[1]})
 			}
 		}
 	}
-	sort.Slice(cpy, func(i, j int) bool {
-		return cpy[i][2] < cpy[j][2]
+	sort.Slice(srt, func(i, j int) bool {
+		return srt[i][2] < srt[j][2]
 	})
 
-	var buf [][][]int
-	union := newDSU(len(edges))
+	buf := [][][]int{}
 
+	union := newDSU(len(edges))
 	for i := 0; i < len(edges); i++ {
 		union.add(i)
 		buf = append(buf, [][]int{})
 	}
 
-	for i := 0; i < len(cpy); i++ {
-		e := cpy[i]
+	for i := 0; i < len(srt); i++ {
+		e := srt[i]
 		root0, root1 := union.find(e[0]), union.find(e[1])
 		if root0 != root1 {
 			buf[e[0]] = append(buf[e[0]], []int{e[1], e[2]})
 			buf[e[1]] = append(buf[e[1]], []int{e[0], e[2]})
+			union.union(root0, root1)
 		}
 	}
 	return buf
