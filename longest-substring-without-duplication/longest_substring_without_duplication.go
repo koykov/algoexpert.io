@@ -19,7 +19,7 @@ func LongestSubstringWithoutDuplication(s string) string {
 	for i := 0; i < n; i++ {
 		e = n
 		for j := i; j < e; j++ {
-			e = min(e, idx[j])
+			e = mn(e, idx[j])
 		}
 		if ln <= (e - i - 1) {
 			ln = e - i - 1
@@ -30,7 +30,7 @@ func LongestSubstringWithoutDuplication(s string) string {
 	return s[l:r]
 }
 
-func min(a, b int) int {
+func mn(a, b int) int {
 	if a < b {
 		return a
 	}
