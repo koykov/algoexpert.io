@@ -19,4 +19,10 @@ func TestLongestMostFrequentPrefix(t *testing.T) {
 		actual := LongestMostFrequentPrefix(strings)
 		require.Equal(t, expected, actual)
 	})
+	t.Run("2", func(t *testing.T) {
+		strings := []string{"abc", "def", "ghi", "jkl", "mnop", "qrs", "tuv", "wxy", "z"}
+		expected := "mnop"
+		actual := LongestMostFrequentPrefix(strings)
+		require.Equal(t, expected, actual)
+	})
 }

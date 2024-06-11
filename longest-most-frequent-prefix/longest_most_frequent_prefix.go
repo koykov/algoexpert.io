@@ -12,7 +12,7 @@ func LongestMostFrequentPrefix(ss []string) string {
 	var c int
 	for _, ss1 := range r {
 		ln1 := lcp(ss1)
-		if len(ss1) > c {
+		if len(ss1) > c || (len(ss1) == c && len(ln1) > len(ln)) {
 			ln, c = ln1, len(ss1)
 		}
 	}
@@ -20,9 +20,6 @@ func LongestMostFrequentPrefix(ss []string) string {
 }
 
 func lcp(ss []string) string {
-	if len(ss) < 2 {
-		return ""
-	}
 	r := ss[0]
 	for i := 1; i < len(ss); i++ {
 		for j := 1; j < mn(len(r), len(ss[i])); j++ {
