@@ -27,9 +27,25 @@ func (ll *LinkedList) ToArray() []int {
 }
 
 func TestMergeLinkedLists(t *testing.T) {
-	list1 := NewLinkedList(2, 6, 7, 8)
-	list2 := NewLinkedList(1, 3, 4, 5, 9, 10)
-	output := MergeLinkedLists(list1, list2)
-	expectedNodes := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-	require.Equal(t, output.ToArray(), expectedNodes)
+	t.Run("0", func(t *testing.T) {
+		list1 := NewLinkedList(2, 6, 7, 8)
+		list2 := NewLinkedList(1, 3, 4, 5, 9, 10)
+		output := MergeLinkedLists(list1, list2)
+		expectedNodes := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+		require.Equal(t, expectedNodes, output.ToArray())
+	})
+	t.Run("1", func(t *testing.T) {
+		list1 := NewLinkedList(1, 1, 1, 3, 4, 5, 5, 5, 5, 10)
+		list2 := NewLinkedList(1, 1, 2, 2, 5, 6, 10, 10)
+		output := MergeLinkedLists(list1, list2)
+		expectedNodes := []int{1, 1, 1, 1, 1, 2, 2, 3, 4, 5, 5, 5, 5, 5, 6, 10, 10, 10}
+		require.Equal(t, expectedNodes, output.ToArray())
+	})
+	t.Run("2", func(t *testing.T) {
+		list1 := NewLinkedList(2)
+		list2 := NewLinkedList(1)
+		output := MergeLinkedLists(list1, list2)
+		expectedNodes := []int{1, 2}
+		require.Equal(t, expectedNodes, output.ToArray())
+	})
 }
