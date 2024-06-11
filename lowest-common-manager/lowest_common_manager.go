@@ -6,30 +6,20 @@ type OrgChart struct {
 }
 
 func GetLowestCommonManager(root, r0, r1 *OrgChart) *OrgChart {
-	var s solution
-	s.dfs(root, r0, r1)
-	return s.r
-}
-
-type solution struct {
-	r      *OrgChart
-	a0, a1 bool
-}
-
-func (s *solution) dfs(root *OrgChart, r0, r1 *OrgChart) {
-	if root.Name == r0.Name {
-		s.a0 = true
-		return
-	}
-	if root.Name == r1.Name {
-		s.a1 = true
-		return
+	var x *OrgChart
+	var c int
+	if root == nil || r0.Name == root.Name || r1.Name == root.Name {
+		return root
 	}
 	for i := 0; i < len(root.DirectReports); i++ {
-		s.dfs(root.DirectReports[i], r0, r1)
-		if s.a0 && s.a1 && s.r == nil {
-			s.r = root
-			break
+		r := GetLowestCommonManager(root.DirectReports[i], r0, r1)
+		if r != nil {
+			c++
+			x = r
 		}
 	}
+	if c == 2 {
+		return root
+	}
+	return x
 }
