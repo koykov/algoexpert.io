@@ -10,29 +10,26 @@ func MergeLinkedLists(h0 *LinkedList, h1 *LinkedList) *LinkedList {
 		h0, h1 = h1, h0
 	}
 	r := h0
+	c := h0
+	if h0 = h0.Next; h0 == nil {
+		c.Next = h1
+		goto exit
+	}
 	for {
-		eq := h0.Value == h1.Value
-		for h1 != nil && h0.Value == h1.Value {
-			t := h1
-			h1 = h1.Next
-			t.Next = h0.Next
-			h0.Next = t
-		}
-		for eq && h0.Value == h0.Next.Value {
+		if h0.Value <= h1.Value {
+			c.Next = h0
 			h0 = h0.Next
-		}
-		if h0.Value+1 == h1.Value {
-			t := h1
+		} else {
+			c.Next = h1
 			h1 = h1.Next
-			t.Next = h0.Next
-			h0.Next = t
 		}
-		h0 = h0.Next
+		c = c.Next
 		switch {
-		case h0.Next == nil:
-			h0.Next = h1
+		case h0 == nil:
+			c.Next = h1
 			goto exit
 		case h1 == nil:
+			c.Next = h0
 			goto exit
 		}
 	}
