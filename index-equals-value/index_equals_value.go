@@ -1,15 +1,20 @@
 package index_equals_value
 
-func IndexEqualsValue(a []int) int {
+func IndexEqualsValue(a []int) (r int) {
+	r = -1
 	n := len(a)
-	m := n / 2
-	switch {
-	case a[m] == m:
-		return m
-	case a[m] > m:
-		return IndexEqualsValue(a[:m])
-	case a[m] < m:
-		return IndexEqualsValue(a[m:])
+	lo, hi := 0, n-1
+	for lo <= hi {
+		m := (lo + hi) / 2
+		switch {
+		case a[m] == m:
+			r = m
+			hi = m - 1
+		case m > a[m]:
+			lo = m + 1
+		default:
+			hi = m - 1
+		}
 	}
-	return -1
+	return
 }
