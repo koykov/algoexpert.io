@@ -3,6 +3,7 @@ package underscorify_substring
 import "strings"
 
 func UnderscorifySubstring(s string, ss string) string {
+	n := len(ss)
 	buf := make([]byte, 0, len(s)*2)
 	for {
 		p := strings.Index(s, ss)
@@ -13,20 +14,23 @@ func UnderscorifySubstring(s string, ss string) string {
 		if p > 0 {
 			buf = append(buf, s[:p]...)
 		}
-		if len(buf) > 0 && buf[len(buf)-1] == '_' {
-			buf = buf[:len(buf)-1]
-		} else {
-			buf = append(buf, '_')
-		}
-		buf = append(buf, ss...)
 		buf = append(buf, '_')
-		pp := strings.Index(s[p+1:], ss)
-		if pp > 0 && pp-p+1 < len(ss) {
-			buf = buf[:len(buf)-pp-1]
+		for {
+			pp := strings.Index(s[p+1:], ss)
+			if pp == -1 || pp+1 > n {
+				buf = append(buf, ss...)
+				break
+			}
+			var d int
+			if pp > 0 && pp+1 < n {
+				d = n - pp - 1
+			}
+			buf = append(buf, ss[:n-d]...)
 			s = s[p+pp+1:]
-		} else {
-			s = s[p+len(ss):]
+			p = 0
 		}
+		buf = append(buf, '_')
+		s = s[p+len(ss):]
 	}
 	return string(buf)
 }
