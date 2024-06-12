@@ -2,7 +2,7 @@ package underscorify_substring
 
 import "strings"
 
-// O(n) + O(n) solution
+// O(n) time and O(n) space solution based on substring manipulations
 func UnderscorifySubstring(s string, ss string) string {
 	n := len(ss)
 	buf := make([]byte, 0, len(s)*2)
