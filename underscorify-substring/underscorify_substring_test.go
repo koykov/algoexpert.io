@@ -12,4 +12,9 @@ func TestUnderscorifySubstring(t *testing.T) {
 		output := UnderscorifySubstring("testthis is a testtest to see if testestest it works", "test")
 		require.Equal(t, expected, output)
 	})
+	t.Run("", func(t *testing.T) {
+		expected := "_tttttttttttttt_b_ttttt_ctatawta_ttttt_astvb"
+		output := UnderscorifySubstring("ttttttttttttttbtttttctatawtatttttastvb", "ttt")
+		require.Equal(t, expected, output)
+	})
 }

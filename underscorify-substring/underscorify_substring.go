@@ -2,6 +2,7 @@ package underscorify_substring
 
 import "strings"
 
+// O(n) + O(n) solution
 func UnderscorifySubstring(s string, ss string) string {
 	n := len(ss)
 	buf := make([]byte, 0, len(s)*2)
@@ -24,6 +25,8 @@ func UnderscorifySubstring(s string, ss string) string {
 			var d int
 			if pp > 0 && pp+1 < n {
 				d = n - pp - 1
+			} else if pp == 0 {
+				d = n - 1
 			}
 			buf = append(buf, ss[:n-d]...)
 			s = s[p+pp+1:]
