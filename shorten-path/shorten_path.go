@@ -6,8 +6,12 @@ func ShortenPath(p string) string {
 	if p == "/" || len(p) == 0 {
 		return p
 	}
+	if p == "./.." {
+		return ".."
+	}
 	var stk []string
-	if p[0] == '/' {
+	var lead bool
+	if lead = p[0] == '/'; lead {
 		stk = append(stk, "")
 		p = p[1:]
 	} else {
@@ -22,32 +26,35 @@ func ShortenPath(p string) string {
 		}
 	}
 
-	var t, pt string
+	var t string
 	for {
 		t, p = token(p)
 		switch t {
 		case ".", "":
 			// CWD, do nothing
 		case "..":
-			if len(stk) > 0 && stk[len(stk)-1] != "" {
+			var last string
+			if len(stk) > 0 {
+				last = stk[len(stk)-1]
+			}
+			if len(stk) > 0 && last != "" {
 				stk = stk[:len(stk)-1]
 			}
-			// switch {
-			// case len(stk) == 1 && stk[0] != "" && stk[0] != "..":
-			// 	stk = stk[:len(stk)-1]
-			// case len(stk) > 1:
-			// 	stk = stk[:len(stk)-1]
-			// default:
-			// 	stk = append(stk, t)
-			// }
+			if last == ".." && !lead {
+				stk = append(stk, "..", "..")
+			}
+			if last == "" && !lead {
+				stk = append(stk, "..")
+			}
 		default:
 			stk = append(stk, t)
 		}
-		pt = t
-		_ = pt
 		if len(p) == 0 {
 			break
 		}
+	}
+	if len(stk) == 1 && stk[0] == "" {
+		stk = append(stk, "")
 	}
 	return strings.Join(stk, "/")
 }
@@ -55,9 +62,13 @@ func ShortenPath(p string) string {
 func token(s string) (string, string) {
 	n := len(s)
 	switch {
-	case n > 2 && s[:2] == "..":
-		return s[:2], s[3:]
-	case n > 1 && s[:1] == ".":
+	case n >= 2 && s[:2] == "..":
+		var r string
+		if n > 2 {
+			r = s[3:]
+		}
+		return s[:2], r
+	case n >= 1 && s[:1] == ".":
 		return s[:1], s[2:]
 	default:
 		p := strings.IndexByte(s, '/')
