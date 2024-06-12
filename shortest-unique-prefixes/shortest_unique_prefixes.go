@@ -1,50 +1,52 @@
 package shortest_unique_prefixes
 
 func ShortestUniquePrefixes(ss []string) []string {
-	r := make(map[byte][]string)
+	t := trie{root: &node{childs: make(map[string]*node)}}
 	for i := 0; i < len(ss); i++ {
-		r[ss[i][0]] = append(r[ss[i][0]], ss[i])
-	}
-	var o []string
-	for _, ss1 := range r {
-		ch := lcp(ss1)
-		o = append(o, ch...)
-	}
-	return o
-}
-
-func lcp(ss []string) []string {
-	if len(ss) == 1 {
-		return []string{ss[0][:1]}
+		t.insert(ss[i])
 	}
 	var r []string
-	s := ss[0]
-	for i := 1; i < len(ss); i++ {
-		for j := 1; j < mn(len(s), len(ss[i])); j++ {
-			if j == len(ss[i]) {
-				s = ss[i]
-				break
-			}
-			if s[j] != ss[i][j] {
-				s = s[0:j]
-				break
-			}
-		}
-	}
 	for i := 0; i < len(ss); i++ {
-		if len(ss[i]) > len(s) {
-			r = append(r, ss[i][:len(s)+1])
-		}
-		if len(ss[i]) == len(s) {
-			r = append(r, s)
-		}
+		r = append(r, t.sup(ss[i]))
 	}
 	return r
 }
 
-func mn(a, b int) int {
-	if a < b {
-		return a
+type node struct {
+	childs map[string]*node
+	visit  int
+}
+
+type trie struct {
+	root *node
+}
+
+func (t *trie) insert(s string) {
+	n := t.root
+	for _, c := range s {
+		cs := string(c)
+		ch, ok := n.childs[cs]
+		if !ok {
+			ch = &node{childs: make(map[string]*node)}
+			n.childs[cs] = ch
+		}
+		n = ch
+		n.visit++
 	}
-	return b
+}
+
+func (t *trie) sup(s string) string {
+	n := t.root
+	for i, c := range s {
+		cs := string(c)
+		ch, ok := n.childs[cs]
+		if !ok {
+			return ""
+		}
+		n = ch
+		if n.visit == 1 {
+			return s[0 : i+1]
+		}
+	}
+	return s
 }
