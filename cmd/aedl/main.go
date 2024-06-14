@@ -11,7 +11,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/koykov/bytealg"
 	"github.com/koykov/bytebuf"
+	"github.com/koykov/byteconv"
 	"github.com/koykov/jsonvector"
 	"github.com/koykov/vector"
 )
@@ -43,10 +45,17 @@ var (
 		4: "Very Hard",
 	}
 
-	reComment = regexp.MustCompile(`<span class="[^"]+">(.*)</span>`)
-	reSpan    = regexp.MustCompile(`<span>(.*)</span>`)
-	reP       = regexp.MustCompile(`<p>[\n\s]*([^<]+)</p>`)
-	reH3      = regexp.MustCompile(`<h3>(.*)</h3>`)
+	bP   = []byte("<p>")
+	bCP  = []byte("</p>")
+	bNSS = []byte("\n  ")
+
+	reComment  = regexp.MustCompile(`<span class="[^"]+">(.*)</span>`)
+	reP        = regexp.MustCompile(`<p>\n([^<]+)</p>`)
+	reH3       = regexp.MustCompile(`<h3>(.*)</h3>`)
+	reUL       = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
+	reLI       = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
+	reNormPre  = regexp.MustCompile(`(<pre>)([^\n])`)
+	reNormCPre = regexp.MustCompile(`([^\n])(</pre>)`)
 
 	auth = flag.String("auth", "", "authorization cookie string")
 )
@@ -73,9 +82,9 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		if uid != "array-of-products" { // todo remove me
-			return
-		}
+		// if uid != "find-kth-largest-value-in-bst" { // todo remove me
+		// 	return
+		// }
 		qRaw, err := dlQuestion(uid)
 		if err != nil {
 			f++
@@ -155,10 +164,38 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = strings.ReplaceAll(prompt, "<div class=\"html\">\n", "")
 	prompt = strings.ReplaceAll(prompt, `</div>`, "")
 	prompt = reComment.ReplaceAllString(prompt, "$1")
-	prompt = reSpan.ReplaceAllString(prompt, "`$1`")
+	prompt = strings.ReplaceAll(prompt, "<span>", "`")
+	prompt = strings.ReplaceAll(prompt, `</span>`, "`")
+
+	pb := byteconv.S2B(prompt)
+	var off int
+	for {
+		s := bytealg.IndexAt(pb, bP, off)
+		e := bytealg.IndexAt(pb, bCP, off+1)
+		if s != -1 && e != -1 {
+			poff := s + 3
+			for {
+				p := bytealg.IndexAt(pb, bNSS, poff)
+				if p == -1 || p > e {
+					break
+				}
+				copy(pb[p+1:], pb[p+3:])
+				pb = pb[:len(pb)-2]
+				e -= 2
+			}
+			off = e
+			continue
+		}
+		break
+	}
+	prompt = byteconv.B2S(pb)
+
 	prompt = reP.ReplaceAllString(prompt, "$1")
-	prompt = strings.ReplaceAll(prompt, "\n  ", " ")
-	prompt = reH3.ReplaceAllString(prompt, "\n$1")
+	prompt = reH3.ReplaceAllString(prompt, "\n### $1")
+	prompt = reNormPre.ReplaceAllString(prompt, "$1\n$2")
+	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n$2")
+	prompt = reLI.ReplaceAllString(prompt, "\n* $1")
+	prompt = reUL.ReplaceAllString(prompt, "$1\n")
 	prompt = strings.ReplaceAll(prompt, "<pre>", "```")
 	prompt = strings.ReplaceAll(prompt, `</pre>`, "```")
 

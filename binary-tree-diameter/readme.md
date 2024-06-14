@@ -1,12 +1,26 @@
 # Binary Tree Diameter
 
-Write a function that takes in a Binary Tree and returns its diameter. The diameter of a binary tree is defined as the length of its longest path, even if that path doesn't pass through the root of the tree.
+Category: Binary Trees
 
-A path is a collection of connected nodes in a tree, where no node is connected to more than two other nodes. The length of a path is the number of edges between the path's first node and its last node.
+Difficulty: Medium
 
-Each `BinaryTree` node has an integer `value`, a left child `node`, and a `right` child node. Children nodes can either be `BinaryTree` nodes themselves or `None` / `null`.
+## Description
 
-Sample Input
+Write a function that takes in a Binary Tree and returns its diameter. The
+diameter of a binary tree is defined as the length of its longest path, even
+if that path doesn't pass through the root of the tree.
+
+A path is a collection of connected nodes in a tree, where no node is
+connected to more than two other nodes. The length of a path is the number of
+edges between the path's first node and its last node.
+
+Each `BinaryTree` node has an integer `value`, a
+`left` child node, and a `right` child node. Children
+nodes can either be `BinaryTree` nodes themselves or
+`None` / `null`.
+
+
+### Sample Input
 ```
 tree =        1
             /   \
@@ -19,7 +33,7 @@ tree =        1
     9             6
 ```
 
-Sample Output
+### Sample Output
 ```
 6 // 9 -> 8 -> 7 -> 3 -> 4 -> 5 -> 6
 // There are 6 edges between the
@@ -29,4 +43,4 @@ Sample Output
 
 ## Optimal Space & Time Complexity
 
-Average case: when the tree is balanced O(n) time | O(h) space - where n is the number of nodes in the Binary Tree and h is the height of the Binary Tree
+Average case: when the tree is balanced\nO(n) time | O(h) space - where n is the number of nodes in the Binary Tree and h is the height of the Binary Tree

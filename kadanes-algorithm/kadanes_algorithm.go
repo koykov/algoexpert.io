@@ -1,4 +1,4 @@
-package kadane_s_algorithm
+package kadanes_algorithm
 
 import "math"
 
