@@ -3,12 +3,17 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"regexp"
+	"strings"
 
+	"github.com/koykov/bytebuf"
 	"github.com/koykov/jsonvector"
+	"github.com/koykov/vector"
 )
 
 var (
@@ -30,6 +35,19 @@ var (
 		"sec-fetch-site":     "same-site",
 		"user-agent":         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
 	}
+	difficulty = map[int]string{
+		0: "Unknown",
+		1: "Easy",
+		2: "Medium",
+		3: "Hard",
+		4: "Very Hard",
+	}
+
+	reComment = regexp.MustCompile(`<span class="[^"]+">(.*)</span>`)
+	reSpan    = regexp.MustCompile(`<span>(.*)</span>`)
+	reP       = regexp.MustCompile(`<p>[\n\s]*([^<]+)</p>`)
+	reH3      = regexp.MustCompile(`<h3>(.*)</h3>`)
+
 	auth = flag.String("auth", "", "authorization cookie string")
 )
 
@@ -42,30 +60,60 @@ func init() {
 }
 
 func main() {
-	var vec jsonvector.Vector
-	var buf bytes.Buffer
-
 	idxRaw, err := dlIndex()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	if err = vec.Parse(idxRaw); err != nil {
-		log.Fatalln(err)
-	}
-	_ = vec.Beautify(&buf)
-	os.WriteFile("list.json", buf.Bytes(), 0644)
 
-	qRaw, err := dlQuestion("disk-stacking")
-	if err != nil {
+	root := jsonvector.Acquire()
+	defer jsonvector.Release(root)
+	if err = root.Parse(idxRaw); err != nil {
 		log.Fatalln(err)
 	}
-	vec.Reset()
-	buf.Reset()
-	if err = vec.Parse(qRaw); err != nil {
-		log.Fatalln(err)
-	}
-	_ = vec.Beautify(&buf)
-	os.WriteFile("dist-stacking.json", buf.Bytes(), 0644)
+	var c, f int
+	root.Get("questions").Each(func(idx int, node *vector.Node) {
+		uid := node.GetString("uid")
+		if uid != "array-of-products" { // todo remove me
+			return
+		}
+		qRaw, err := dlQuestion(uid)
+		if err != nil {
+			f++
+			log.Printf("* %s: download error: %s\n", uid, err.Error())
+			return
+		}
+
+		vec := jsonvector.Acquire()
+		defer jsonvector.Release(vec)
+		if err = vec.Parse(qRaw); err != nil {
+			f++
+			log.Printf("* %s: parse error: %s\n", uid, err.Error())
+			return
+		}
+
+		b, err := composeReadme(vec)
+		if err != nil {
+			f++
+			log.Printf("* %s: compose error: %s\n", uid, err.Error())
+			return
+		}
+
+		uid1 := uid
+		if strings.IndexByte(uid, '\'') != -1 {
+			uid1 = strings.ReplaceAll(uid1, "'", "")
+		}
+		pth := fmt.Sprintf("%s/readme.md", uid1)
+		if err = os.WriteFile(pth, b, 0644); err != nil {
+			f++
+			log.Printf("* %s: write error: %s\n", uid, err.Error())
+			return
+		}
+
+		log.Printf("* %s: success\n", uid)
+		c++
+	})
+
+	log.Printf("%d questions loaded\n", c)
 }
 
 func dlIndex() ([]byte, error) {
@@ -98,4 +146,34 @@ func dlQuestion(slug string) ([]byte, error) {
 
 	b, err := io.ReadAll(resp.Body)
 	return b, err
+}
+
+func composeReadme(vec vector.Interface) (b []byte, err error) {
+	var buf bytebuf.Chain
+
+	prompt := vec.DotString("prompt")
+	prompt = strings.ReplaceAll(prompt, "<div class=\"html\">\n", "")
+	prompt = strings.ReplaceAll(prompt, `</div>`, "")
+	prompt = reComment.ReplaceAllString(prompt, "$1")
+	prompt = reSpan.ReplaceAllString(prompt, "`$1`")
+	prompt = reP.ReplaceAllString(prompt, "$1")
+	prompt = strings.ReplaceAll(prompt, "\n  ", " ")
+	prompt = reH3.ReplaceAllString(prompt, "\n$1")
+	prompt = strings.ReplaceAll(prompt, "<pre>", "```")
+	prompt = strings.ReplaceAll(prompt, `</pre>`, "```")
+
+	d, _ := vec.DotInt("difficulty")
+	buf.WriteString("# ").
+		Write(vec.DotBytes("name")).
+		WriteString("\n\n").
+		WriteString("Category: ").WriteString(vec.DotString("category")).WriteString("\n\n").
+		WriteString("Difficulty: ").WriteString(difficulty[int(d)]).WriteString("\n\n").
+		WriteString("## Description\n\n").
+		WriteString(prompt).
+		WriteString("\n").
+		WriteString("## Optimal Space & Time Complexity\n\n").
+		Write(vec.DotBytes("spaceTime")).
+		WriteByte('\n')
+	b = buf.Bytes()
+	return
 }
