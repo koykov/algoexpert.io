@@ -49,15 +49,16 @@ var (
 	bCP  = []byte("</p>")
 	bNSS = []byte("\n  ")
 
-	reComment  = regexp.MustCompile(`<span class="[^"]+">(&.*|[\s\S]*?)</span>`)
-	reP        = regexp.MustCompile(`<p>\n([^<]+)</p>`)
-	reH3       = regexp.MustCompile(`<h3>(.*)</h3>`)
-	reUL       = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
-	reOL       = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
-	reLI       = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
-	reNormPre  = regexp.MustCompile(`(<pre>)([^\n])`)
-	reNormCPre = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
-	reNormPre1 = regexp.MustCompile(`</p>\s<pre>`)
+	reComment   = regexp.MustCompile(`<span class="[^"]+">(&.*|[\s\S]*?)</span>`)
+	reP         = regexp.MustCompile(`<p>\n([^<]+)</p>`)
+	reH3        = regexp.MustCompile(`<h3>(.*)</h3>`)
+	reUL        = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
+	reOL        = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
+	reLI        = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
+	reNormPre   = regexp.MustCompile(`(<pre>)([^\n])`)
+	reNormCPre  = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
+	reNormPre1  = regexp.MustCompile(`</p>\s<pre>`)
+	reNormCPre1 = regexp.MustCompile(`([^\n]*)(</pre[\n\s]+>)`)
 
 	auth = flag.String("auth", "", "authorization cookie string")
 )
@@ -84,7 +85,7 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "maximum-sum-submatrix" { // todo remove me
+		// if uid != "repair-bst" { // todo remove me
 		// 	return
 		// }
 		qRaw, err := dlQuestion(uid)
@@ -199,6 +200,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = reNormPre.ReplaceAllString(prompt, "<pre>\n$2")
 	prompt = reNormPre1.ReplaceAllString(prompt, "</p>\n\n<pre>")
 	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n</pre>")
+	prompt = reNormCPre1.ReplaceAllString(prompt, "$1</pre>")
 	prompt = reLI.ReplaceAllString(prompt, "\n* $1")
 	prompt = reUL.ReplaceAllString(prompt, "$1\n")
 	prompt = reOL.ReplaceAllString(prompt, "$1\n")

@@ -45,8 +45,7 @@ tree =    10
    3      8  12   22
   /           \
 2              14
-</pre
-  >
+```
 
 ## Optimal Space & Time Complexity
 
