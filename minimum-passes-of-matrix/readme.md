@@ -24,6 +24,7 @@ A single pass through the matrix involves converting all the negative integers
 that <i>can</i> be converted at a particular point in time. For example,
 consider the following input matrix:
 </p>
+
 ```
 [ 
   [0, -2, -1], 
@@ -32,6 +33,7 @@ consider the following input matrix:
 ]
 ```
 <p>After a first pass, only 3 values can be converted to positives:</p>
+
 ```
 [ 
   [0, 2, -1], 

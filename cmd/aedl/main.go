@@ -56,6 +56,7 @@ var (
 	reLI       = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
 	reNormPre  = regexp.MustCompile(`(<pre>)([^\n])`)
 	reNormCPre = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
+	reNormPre1 = regexp.MustCompile(`</p>\s<pre>`)
 
 	auth = flag.String("auth", "", "authorization cookie string")
 )
@@ -82,7 +83,7 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "find-loop" { // todo remove me
+		// if uid != "maximum-sum-submatrix" { // todo remove me
 		// 	return
 		// }
 		qRaw, err := dlQuestion(uid)
@@ -195,6 +196,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = strings.ReplaceAll(prompt, `&gt;`, ">")
 	prompt = reH3.ReplaceAllString(prompt, "\n### $1")
 	prompt = reNormPre.ReplaceAllString(prompt, "<pre>\n$2")
+	prompt = reNormPre1.ReplaceAllString(prompt, "</p>\n\n<pre>")
 	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n</pre>")
 	prompt = reLI.ReplaceAllString(prompt, "\n* $1")
 	prompt = reUL.ReplaceAllString(prompt, "$1\n")

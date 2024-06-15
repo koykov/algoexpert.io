@@ -12,6 +12,7 @@ and width that's filled with integers. You're also given a positive integer
 generated from a submatrix with dimensions `size * size`.
 
 <p>For example, consider the following matrix:</p>
+
 ```
 [
   [2, 4],
@@ -20,6 +21,7 @@ generated from a submatrix with dimensions `size * size`.
 ]
 ```
 <p>If `size = 2`, then the 2x2 submatrices to consider are:</p>
+
 ```
 [2, 4]
 [5, 6]
