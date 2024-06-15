@@ -9,7 +9,9 @@ Difficulty: Hard
 Write a function that takes in a string and returns its longest substring
 without duplicate characters.
 
-<p>You can assume that there will only be one longest substring without duplication.</p>
+
+You can assume that there will only be one longest substring without duplication.
+
 
 ### Sample Input
 ```

@@ -23,7 +23,9 @@ Note that you're <b><i>not</i></b> allowed to to use any built-in
 `split` or `reverse` methods/functions. However, you
 <b><i>are</i></b> allowed to use a built-in `join` method/function.
 </p>
-<p>Also note that the input string isn't guaranteed to always contain words.</p>
+
+Also note that the input string isn't guaranteed to always contain words.
+
 
 ### Sample Input
 ```

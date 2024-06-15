@@ -18,7 +18,9 @@ has the minimum index.
 If no integer appears more than once, your function should return
 `-1`.
 
-<p>Note that you're allowed to mutate the input array.</p>
+
+Note that you're allowed to mutate the input array.
+
 
 ### Sample Input #1
 ```

@@ -17,7 +17,9 @@ For example, if you were given a staircase of `height = 3` and
 take <b>1 step, 1 step, then 1 step</b>, you could also take
 <b>1 step, then 2 steps</b>, and you could take <b>2 steps, then 1 step</b>.
 </p>
-<p>Note that `maxSteps <= height` will always be true.</p>
+
+Note that `maxSteps <= height` will always be true.
+
 
 ### Sample Input
 ```

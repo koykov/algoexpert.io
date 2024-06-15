@@ -9,7 +9,9 @@ Difficulty: Easy
 Write a function that takes in a Binary Search Tree (BST) and a target integer
 value and returns the closest value to that target value contained in the BST.
 
-<p>You can assume that there will only be one closest value.</p>
+
+You can assume that there will only be one closest value.
+
 Each `BST` node has an integer `value`, a
 `left` child node, and a `right` child node. A node is
 said to be a valid `BST` node if and only if it satisfies the BST

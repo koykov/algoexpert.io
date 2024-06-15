@@ -32,7 +32,8 @@ consider the following input matrix:
   [-6, -2, 0],
 ]
 ```
-<p>After a first pass, only 3 values can be converted to positives:</p>
+
+After a first pass, only 3 values can be converted to positives:
 
 ```
 [ 

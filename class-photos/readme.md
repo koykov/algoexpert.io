@@ -25,7 +25,9 @@ with blue shirts. These arrays will always have the same length, and each
 height will be a positive integer. Write a function that returns whether or
 not a class photo that follows the stated guidelines can be taken.
 
-<p>Note: you can assume that each class has at least 2 students.</p>
+
+Note: you can assume that each class has at least 2 students.
+
 
 ### Sample Input
 ```

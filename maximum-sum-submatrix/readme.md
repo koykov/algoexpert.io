@@ -11,7 +11,8 @@ and width that's filled with integers. You're also given a positive integer
 `size`. Write a function that returns the maximum sum that can be
 generated from a submatrix with dimensions `size * size`.
 
-<p>For example, consider the following matrix:</p>
+
+For example, consider the following matrix:
 
 ```
 [
@@ -20,7 +21,8 @@ generated from a submatrix with dimensions `size * size`.
   [-3, 2],
 ]
 ```
-<p>If `size = 2`, then the 2x2 submatrices to consider are:</p>
+
+If `size = 2`, then the 2x2 submatrices to consider are:
 
 ```
 [2, 4]

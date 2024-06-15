@@ -18,7 +18,9 @@ other in the set of real integers. For instance, the output array
 is a range of length 5. Note that numbers don't need to be sorted or adjacent
 in the input array in order to form a range.
 
-<p>You can assume that there will only be one largest range.</p>
+
+You can assume that there will only be one largest range.
+
 
 ### Sample Input
 ```

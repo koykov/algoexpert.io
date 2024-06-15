@@ -22,7 +22,9 @@ of unique characters in the document string. For example, if you're given
 The document that you need to create may contain any characters, including
 special characters, capital letters, numbers, and spaces.
 
-<p>Note: you can always generate the empty string (`""`).</p>
+
+Note: you can always generate the empty string (`""`).
+
 
 ### Sample Input
 ```

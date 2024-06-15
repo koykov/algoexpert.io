@@ -13,7 +13,9 @@ the product of every other number in the input array.
 In other words, the value at `output[i]` is equal to the product of
 every number in the input array other than `input[i]`.
 
-<p>Note that you're expected to solve this problem without using division.</p>
+
+Note that you're expected to solve this problem without using division.
+
 
 ### Sample Input
 ```

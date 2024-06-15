@@ -6,7 +6,9 @@ Difficulty: Medium
 
 ## Description
 
-<p>Implement a `MinHeap` class that supports:</p>
+
+Implement a `MinHeap` class that supports:
+
 * Building a Min Heap from an input array of integers.
 * Inserting integers in the heap.
 * Removing the heap's minimum / root value.
@@ -14,7 +16,9 @@ Difficulty: Medium
 * Sifting integers up and down the heap, which is to be used when inserting
     and removing values.
 
-<p>Note that the heap should be represented in the form of an array.</p>
+
+Note that the heap should be represented in the form of an array.
+
 If you're unfamiliar with Min Heaps, we recommend watching the
 Conceptual Overview section of this question's video explanation before
 starting to code.

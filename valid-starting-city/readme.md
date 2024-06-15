@@ -32,7 +32,9 @@ empty, and you're given a positive integer value for the number of miles that
 your car can travel per gallon of fuel (miles per gallon, or MPG). You can
 assume that you will always be given at least two cities.
 
-<p>Write a function that returns the index of the valid starting city.</p>
+
+Write a function that returns the index of the valid starting city.
+
 
 ### Sample Input
 ```

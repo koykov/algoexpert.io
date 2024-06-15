@@ -16,7 +16,9 @@ Non-increasing elements aren't necessarily exclusively decreasing; they simply
 don't increase. Similarly, non-decreasing elements aren't necessarily
 exclusively increasing; they simply don't decrease.
 
-<p>Note that empty arrays and arrays of one element are monotonic.</p>
+
+Note that empty arrays and arrays of one element are monotonic.
+
 
 ### Sample Input
 ```

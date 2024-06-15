@@ -27,7 +27,9 @@ Write a function that returns a modified version of the input matrix, where
 all of the islands are removed. You remove an island by replacing it with
 `0`s.
 
-<p>Naturally, you're allowed to mutate the input matrix.</p>
+
+Naturally, you're allowed to mutate the input matrix.
+
 
 ### Sample Input
 ```

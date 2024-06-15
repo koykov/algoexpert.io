@@ -51,6 +51,7 @@ var (
 
 	reComment   = regexp.MustCompile(`<span class="[^"]+">(&.*|[\s\S]*?)</span>`)
 	reP         = regexp.MustCompile(`<p>\n([^<]+)</p>`)
+	reP1        = regexp.MustCompile(`<p>([^<]+)</p>`)
 	reH3        = regexp.MustCompile(`<h3>(.*)</h3>`)
 	reUL        = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
 	reOL        = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
@@ -85,7 +86,7 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "repair-bst" { // todo remove me
+		// if uid != "shorten-path" { // todo remove me
 		// 	return
 		// }
 		qRaw, err := dlQuestion(uid)
@@ -194,6 +195,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = byteconv.B2S(pb)
 
 	prompt = reP.ReplaceAllString(prompt, "$1")
+	prompt = reP1.ReplaceAllString(prompt, "\n$1\n")
 	prompt = strings.ReplaceAll(prompt, `&lt;`, "<")
 	prompt = strings.ReplaceAll(prompt, `&gt;`, ">")
 	prompt = reH3.ReplaceAllString(prompt, "\n### $1")

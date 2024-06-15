@@ -16,7 +16,9 @@ A path can be an absolute path, meaning that it starts at the root directory
 in a file system, or a relative path, meaning that it starts at the current
 directory in a file system.
 
-<p>In a Unix-like operating system, a path is bound by the following rules:</p>
+
+In a Unix-like operating system, a path is bound by the following rules:
+
 * The root directory is represented by a `/`. This means that if
     a path <i>starts</i> with `/`, it's an absolute path; if it
     doesn't, it's a relative path.

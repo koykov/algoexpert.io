@@ -12,7 +12,9 @@ substring.
 A palindrome is defined as a string that's written the same forward and
 backward. Note that single-character strings are palindromes.
 
-<p>You can assume that there will only be one longest palindromic substring.</p>
+
+You can assume that there will only be one longest palindromic substring.
+
 
 ### Sample Input
 ```

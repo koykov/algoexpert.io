@@ -9,7 +9,9 @@ Difficulty: Hard
 Write a function that takes in an array of distinct integers as well as an
 integer `k` and that returns the kth smallest integer in that array.
 
-<p>The function should do this in linear time, on average.</p>
+
+The function should do this in linear time, on average.
+
 
 ### Sample Input
 ```

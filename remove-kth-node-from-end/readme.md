@@ -18,7 +18,9 @@ supposed to be removed. In other words, if the head is the node that's
 supposed to be removed, your function should simply mutate its
 `value` and `next` pointer.
 
-<p>Note that your function doesn't need to return anything.</p>
+
+Note that your function doesn't need to return anything.
+
 You can assume that the input Linked List will always have at least two nodes
 and, more specifically, at least k nodes.
 

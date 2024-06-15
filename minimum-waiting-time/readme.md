@@ -28,7 +28,9 @@ executed in the order of `[5, 1, 4]` would be
 the last query would have to wait the duration of the first two queries before
 being executed.
 
-<p>Note: you're allowed to mutate the input array.</p>
+
+Note: you're allowed to mutate the input array.
+
 
 ### Sample Input
 ```
