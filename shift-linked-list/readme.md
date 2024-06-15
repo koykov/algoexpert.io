@@ -28,7 +28,7 @@ in other words, the head will never be `None` / `null`.
 
 ### Sample Input
 ```
-head` = 0 -> 1 -> 2 -> 3 -> 4 -> 5 <span class="CodeEditor-promptComment">// the head node with value 0
+head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 // the head node with value 0
 k = 2
 ```
 

@@ -21,7 +21,7 @@ and with constant space.
 ### Sample Usage
 ```
 // All operations below are performed sequentially.
-MinMaxStack`(): - <span class="CodeEditor-promptComment">// instantiate a MinMaxStack
+MinMaxStack(): - // instantiate a MinMaxStack
 push(5): -
 getMin(): 5
 getMax(): 5

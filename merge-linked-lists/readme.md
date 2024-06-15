@@ -21,8 +21,8 @@ words, the heads will never be `None` / `null`.
 
 ### Sample Input
 ```
-headOne` = 2 -> 6 -> 7 -> 8 <span class="CodeEditor-promptComment">// the head node with value 2
-headTwo` = 1 -> 3 -> 4 -> 5 -> 9 -> 10 <span class="CodeEditor-promptComment">// the head node with value 1
+headOne = 2 -> 6 -> 7 -> 8 // the head node with value 2
+headTwo = 1 -> 3 -> 4 -> 5 -> 9 -> 10 // the head node with value 1
 ```
 
 ### Sample Output

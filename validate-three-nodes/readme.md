@@ -47,9 +47,9 @@ tree =    5
   /     /
  0     3  
 // This tree won't actually be passed as an input; it's here to help you visualize the problem.
-nodeOne` = 5 <span class="CodeEditor-promptComment">// The actual node with value 5.
-nodeTwo` = 2 <span class="CodeEditor-promptComment">// The actual node with value 2.
-nodeThree` = 3 <span class="CodeEditor-promptComment">// The actual node with value 3.
+nodeOne = 5 // The actual node with value 5.
+nodeTwo = 2 // The actual node with value 2.
+nodeThree = 3 // The actual node with value 3.
 ```
 
 ### Sample Output

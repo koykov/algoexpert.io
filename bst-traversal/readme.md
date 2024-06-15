@@ -38,9 +38,9 @@ array = []
 
 ### Sample Output
 ```
-inOrderTraverse`: [1, 2, 5, 5, 10, 15, 22] <span class="CodeEditor-promptComment">// where the array is the input array
-preOrderTraverse`: [10, 5, 2, 1, 5, 15, 22] <span class="CodeEditor-promptComment">// where the array is the input array
-postOrderTraverse`: [1, 2, 5, 5, 22, 15, 10] <span class="CodeEditor-promptComment">// where the array is the input array
+inOrderTraverse: [1, 2, 5, 5, 10, 15, 22] // where the array is the input array
+preOrderTraverse: [10, 5, 2, 1, 5, 15, 22] // where the array is the input array
+postOrderTraverse: [1, 2, 5, 5, 22, 15, 10] // where the array is the input array
 ```
 
 ## Optimal Space & Time Complexity

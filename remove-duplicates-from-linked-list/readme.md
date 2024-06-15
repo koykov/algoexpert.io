@@ -20,7 +20,7 @@ a `next` node pointing to the next node in the list or to
 
 ### Sample Input
 ```
-linkedList` = 1 -> 1 -> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6 <span class="CodeEditor-promptComment">// the head node with value 1
+linkedList = 1 -> 1 -> 3 -> 4 -> 4 -> 4 -> 5 -> 6 -> 6 // the head node with value 1
 ```
 
 ### Sample Output

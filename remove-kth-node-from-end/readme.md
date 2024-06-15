@@ -29,7 +29,7 @@ a `next` node pointing to the next node in the list or to
 
 ### Sample Input
 ```
-head` = 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 <span class="CodeEditor-promptComment">// the head node with value 0
+head = 0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 // the head node with value 0
 k = 4
 ```
 

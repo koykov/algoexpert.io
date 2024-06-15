@@ -49,7 +49,7 @@ var (
 	bCP  = []byte("</p>")
 	bNSS = []byte("\n  ")
 
-	reComment  = regexp.MustCompile(`<span class="[^"]+">(.*|[\s\S]*?)</span>`)
+	reComment  = regexp.MustCompile(`<span class="[^"]+">(&.*|[\s\S]*?)</span>`)
 	reP        = regexp.MustCompile(`<p>\n([^<]+)</p>`)
 	reH3       = regexp.MustCompile(`<h3>(.*)</h3>`)
 	reUL       = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
@@ -82,9 +82,9 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		if uid != "colliding-asteroids" { // todo remove me
-			return
-		}
+		// if uid != "find-loop" { // todo remove me
+		// 	return
+		// }
 		qRaw, err := dlQuestion(uid)
 		if err != nil {
 			f++
