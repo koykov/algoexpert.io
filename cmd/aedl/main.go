@@ -53,9 +53,9 @@ var (
 	reP         = regexp.MustCompile(`<p>\n([^<]+)</p>`)
 	reP1        = regexp.MustCompile(`<p>([^<]+)</p>`)
 	reH3        = regexp.MustCompile(`<h3>[\n\s]*(.*)[\n\s]*</h3>`)
-	reUL        = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
-	reOL        = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
-	reLI        = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
+	reUL        = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*</ul>`)
+	reOL        = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*</ol>`)
+	reLI        = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*</li>\s*`)
 	reNormPre   = regexp.MustCompile(`(<pre>)([^\n])`)
 	reNormCPre  = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
 	reNormPre1  = regexp.MustCompile(`</p>\s<pre>`)
@@ -86,9 +86,6 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "suffix-trie-construction" { // todo remove me
-		// 	return
-		// }
 		qRaw, err := dlQuestion(uid)
 		if err != nil {
 			f++
@@ -138,7 +135,7 @@ func dlIndex() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	b, err := io.ReadAll(resp.Body)
 	return b, err
@@ -155,14 +152,14 @@ func dlQuestion(slug string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	b, err := io.ReadAll(resp.Body)
 	return b, err
 }
 
 func composeReadme(vec vector.Interface) (b []byte, err error) {
-	var buf bytebuf.Chain
+	buf := bytebuf.Chain{}
 
 	prompt := vec.DotString("prompt")
 	prompt = strings.ReplaceAll(prompt, "<div class=\"html\">\n", "")
@@ -193,7 +190,6 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 		break
 	}
 	prompt = byteconv.B2S(pb)
-
 	prompt = reP.ReplaceAllString(prompt, "$1")
 	prompt = reP1.ReplaceAllString(prompt, "\n$1\n")
 	prompt = strings.ReplaceAll(prompt, `&lt;`, "<")
