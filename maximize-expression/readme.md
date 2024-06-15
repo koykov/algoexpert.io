@@ -10,7 +10,7 @@ Write a function that takes in an array of integers and returns the largest
 possible value for the expression
 `array[a] - array[b] + array[c] - array[d]`, where `a`,
 `b`, `c`, and `d` are indices of the array
-and `a &lt; b &lt; c &lt; d`.
+and `a < b < c < d`.
 
 If the input array has fewer than `4` elements, your function
 should return `0`.

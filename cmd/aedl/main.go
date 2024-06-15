@@ -191,6 +191,8 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = byteconv.B2S(pb)
 
 	prompt = reP.ReplaceAllString(prompt, "$1")
+	prompt = strings.ReplaceAll(prompt, `&lt;`, "<")
+	prompt = strings.ReplaceAll(prompt, `&gt;`, ">")
 	prompt = reH3.ReplaceAllString(prompt, "\n### $1")
 	prompt = reNormPre.ReplaceAllString(prompt, "<pre>\n$2")
 	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n</pre>")
