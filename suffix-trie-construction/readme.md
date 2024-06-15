@@ -40,15 +40,13 @@ The structure below is the root of the trie.
   "a": {"b": {"c": {"*": true}}},
 }
 ```
-<h3>
-  Sample Input (for searching in the suffix trie above)
-</h3>
+
+### Sample Input (for searching in the suffix trie above)
 ```
 string = "abc"
 ```
-<h3>
-  Sample Output (for searching in the suffix trie above)
-</h3>
+
+### Sample Output (for searching in the suffix trie above)
 ```
 true
 ```

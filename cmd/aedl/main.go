@@ -52,7 +52,7 @@ var (
 	reComment   = regexp.MustCompile(`<span class="[^"]+">(&.*|[\s\S]*?)</span>`)
 	reP         = regexp.MustCompile(`<p>\n([^<]+)</p>`)
 	reP1        = regexp.MustCompile(`<p>([^<]+)</p>`)
-	reH3        = regexp.MustCompile(`<h3>(.*)</h3>`)
+	reH3        = regexp.MustCompile(`<h3>[\n\s]*(.*)[\n\s]*</h3>`)
 	reUL        = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
 	reOL        = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
 	reLI        = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
@@ -86,7 +86,7 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "shorten-path" { // todo remove me
+		// if uid != "suffix-trie-construction" { // todo remove me
 		// 	return
 		// }
 		qRaw, err := dlQuestion(uid)
