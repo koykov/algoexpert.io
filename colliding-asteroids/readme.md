@@ -36,7 +36,6 @@ asteroids = [-3, 5, -8, 6, 7, -4, -7]
 // The 6 never collides with another asteroid.
 // The 7 first collides with the -4, destroying it.
 // The 7 and the -7 then collide, both being destroyed.
-
 ```
 ## Optimal Space & Time Complexity
 

@@ -39,7 +39,6 @@ prices = [0, 1, 3, 2]
 // because the length of prices is 4.
 // To maximize revenue, we split the juice into
 // quantities of 1 and 2, giving a revenue of 1 + 3 = 4
-
 ```
 
 ## Optimal Space & Time Complexity

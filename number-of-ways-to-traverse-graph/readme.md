@@ -15,7 +15,6 @@ you can never move up or left in the graph.
 For example, given the graph illustrated below, with
 `width = 2` and `height = 3`, there are three ways to
 reach the bottom right corner when starting at the top left corner:
-
 ```
  _ _
 |_|_|

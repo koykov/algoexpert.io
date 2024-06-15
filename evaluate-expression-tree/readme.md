@@ -42,7 +42,6 @@ tree =    -1
 ### Sample Output
 ```
 6 // (((2 * 3) - 2) + (8 / 3))
-
 ```
 ## Optimal Space & Time Complexity
 

@@ -46,7 +46,6 @@ knightB = [4, 2]
 ### Sample Output
   ```
 1 // knightA moves to [2, 1], knightB captures knightA on [2, 1]
-
 ```
 
 ## Optimal Space & Time Complexity

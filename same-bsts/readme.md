@@ -39,7 +39,6 @@ true // both arrays represent the BST below
    5      12    94
  /       /     /
 2       11    81
-
 ```
 
 ## Optimal Space & Time Complexity

@@ -45,7 +45,6 @@ edges = [
 False // Nodes 1 and 2 must be different colors than node 0.
 // However, nodes 1 and 2 are also connected, meaning they must also have different colors,
 // which is impossible with only 2 available colors.
-
 ```
 ## Optimal Space & Time Complexity
 

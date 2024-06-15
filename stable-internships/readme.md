@@ -53,7 +53,6 @@ teams = [
   [2, 2]
 ]
 ```
-
 ```
 // This is also a stable matching, but it is suboptimal for the interns
 // because interns 0 and 2 could have been given better team matchings

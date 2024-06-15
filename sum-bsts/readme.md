@@ -39,7 +39,6 @@ tree =     8
 ### Sample Output #1
   ```
 13 // 1, 2, and 10 form the only BST containing at least 3 nodes.
-
 ```
 
   
@@ -60,7 +59,6 @@ tree =     8
 ### Sample Output #2
 ```
 118 // The subtrees rooted at 7 and 10 are both BSTs, and their node values add up to 118.
-
 ```
 
   
@@ -81,7 +79,6 @@ tree =            20
 ### Sample Output #3
   ```
 0 // The subtrees rooted at 8 and 2 are both BSTs, but they only contain 2 nodes each.
-
 ```
 
 ## Optimal Space & Time Complexity

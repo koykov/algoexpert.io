@@ -208,6 +208,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = reOL.ReplaceAllString(prompt, "$1\n")
 	prompt = strings.ReplaceAll(prompt, "<pre>", "```")
 	prompt = strings.ReplaceAll(prompt, `</pre>`, "```")
+	prompt = strings.ReplaceAll(prompt, "\n\n```", "\n```")
 
 	d, _ := vec.DotInt("difficulty")
 	buf.WriteString("# ").

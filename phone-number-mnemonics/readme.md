@@ -8,7 +8,6 @@ Difficulty: Medium
 
 
 If you open the keypad of your mobile phone, it'll likely look like this:
-
 ```
    ----- ----- -----
   |     |     |     |

@@ -93,7 +93,6 @@ board = [
 ]   
 row = 3
 column = 4
-
 ```
   
 ### Sample Output #2

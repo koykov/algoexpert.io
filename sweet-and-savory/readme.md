@@ -55,7 +55,6 @@ target = 10
 ### Sample Output #2
   ```
 [0, 0] // There are no sweet dishes
-
 ```
 
   

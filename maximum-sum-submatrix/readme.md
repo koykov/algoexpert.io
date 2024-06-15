@@ -13,7 +13,6 @@ generated from a submatrix with dimensions `size * size`.
 
 
 For example, consider the following matrix:
-
 ```
 [
   [2, 4],
@@ -23,7 +22,6 @@ For example, consider the following matrix:
 ```
 
 If `size = 2`, then the 2x2 submatrices to consider are:
-
 ```
 [2, 4]
 [5, 6]
