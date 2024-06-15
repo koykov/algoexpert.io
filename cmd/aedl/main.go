@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/koykov/bytealg"
@@ -16,6 +17,14 @@ import (
 	"github.com/koykov/byteconv"
 	"github.com/koykov/jsonvector"
 	"github.com/koykov/vector"
+)
+
+const (
+	readmeMainHeader = `# Algoexpert.io
+
+[algoexpert.io](https://www.algoexpert.io) is a good resource to prepare for coding interviews. This repo contains my solutions of AE problems.
+
+See index section below, there are solution grouped by both [difficulty](#group-by-difficulty) and [category](#group-by-category).`
 )
 
 var (
@@ -37,7 +46,7 @@ var (
 		"sec-fetch-site":     "same-site",
 		"user-agent":         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
 	}
-	difficulty = map[int]string{
+	difficulty = []string{
 		0: "Unknown",
 		1: "Easy",
 		2: "Medium",
@@ -64,6 +73,12 @@ var (
 	auth = flag.String("auth", "", "authorization cookie string")
 )
 
+type tuple struct {
+	name, uid, slug, cat string
+	difficulty           int64
+	ok                   bool
+}
+
 func init() {
 	flag.Parse()
 	if auth == nil || len(*auth) == 0 {
@@ -78,14 +93,43 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	var (
+		diffReg = make(map[int64][]*tuple)
+		catReg  = make(map[string][]*tuple)
+		cats    []string
+	)
+
 	root := jsonvector.Acquire()
 	defer jsonvector.Release(root)
 	if err = root.Parse(idxRaw); err != nil {
 		log.Fatalln(err)
 	}
-	var c, f int
+	var c, f, t int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
+		t++
+
 		uid := node.GetString("uid")
+		slug := uid
+		if strings.IndexByte(uid, '\'') != -1 {
+			slug = strings.ReplaceAll(slug, "'", "")
+		}
+
+		var tpl tuple
+		tpl.difficulty, _ = node.GetInt("difficulty")
+		tpl.name = node.GetString("name")
+		tpl.cat = node.GetString("category")
+		tpl.uid, tpl.slug = uid, slug
+
+		if _, err := os.Stat(slug); !os.IsNotExist(err) {
+			tpl.ok = true
+		}
+
+		diffReg[tpl.difficulty] = append(diffReg[tpl.difficulty], &tpl)
+		if _, ok := catReg[tpl.cat]; !ok {
+			cats = append(cats, tpl.cat)
+		}
+		catReg[tpl.cat] = append(catReg[tpl.cat], &tpl)
+
 		qRaw, err := dlQuestion(uid)
 		if err != nil {
 			f++
@@ -108,11 +152,7 @@ func main() {
 			return
 		}
 
-		uid1 := uid
-		if strings.IndexByte(uid, '\'') != -1 {
-			uid1 = strings.ReplaceAll(uid1, "'", "")
-		}
-		pth := fmt.Sprintf("%s/readme.md", uid1)
+		pth := fmt.Sprintf("%s/readme.md", slug)
 		if err = os.WriteFile(pth, b, 0644); err != nil {
 			f++
 			log.Printf("* %s: write error: %s\n", uid, err.Error())
@@ -123,7 +163,16 @@ func main() {
 		c++
 	})
 
-	log.Printf("%d questions loaded\n", c)
+	_ = f
+	log.Printf("%d questions of %d loaded\n", c, t)
+
+	b, err := composeReadmeMain(diffReg, catReg, cats)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	if err = os.WriteFile("readme.md", b, 0644); err != nil {
+		log.Fatalln(err)
+	}
 }
 
 func dlIndex() ([]byte, error) {
@@ -156,6 +205,104 @@ func dlQuestion(slug string) ([]byte, error) {
 
 	b, err := io.ReadAll(resp.Body)
 	return b, err
+}
+
+func composeReadmeMain(diffReg map[int64][]*tuple, catReg map[string][]*tuple, cats []string) (b []byte, err error) {
+	buf := bytebuf.Chain{}
+
+	buf.WriteString(readmeMainHeader).WriteString("\n\n")
+
+	var mt int
+	buf.WriteString("## Group by difficulty\n\n").
+		WriteByte('|')
+	for i := 1; i < len(difficulty); i++ {
+		dn := difficulty[i]
+		tuples := diffReg[int64(i)]
+		var s, t int64
+		for j := 0; j < len(tuples); j++ {
+			tpl := tuples[j]
+			t++
+			if tpl.ok {
+				s++
+			}
+		}
+		buf.WriteString(dn).
+			WriteString(" (").
+			WriteInt(s).
+			WriteByte('/').
+			WriteInt(t).
+			WriteString(") |")
+
+		sort.Slice(tuples, func(i, j int) bool {
+			return tuples[i].name < tuples[j].name
+		})
+
+		mt = max(mt, len(tuples))
+	}
+	buf.WriteString("\n| --- | --- | --- | --- |\n")
+
+	for i := 0; i < mt; i++ {
+		buf.WriteByte('|')
+		for j := 1; j < len(difficulty); j++ {
+			buf.WriteByte(' ')
+			tuples := diffReg[int64(j)]
+			if len(tuples) > i {
+				tpl := tuples[i]
+				buf.WriteByteIf(tpl.ok, '[').
+					WriteString(tpl.name).
+					WriteStringIf(tpl.ok, "](").
+					WriteStringIf(tpl.ok, tpl.slug).
+					WriteByteIf(tpl.ok, ')')
+			} else {
+				buf.WriteString(" ")
+			}
+			buf.WriteString(" |")
+		}
+		buf.WriteByte('\n')
+	}
+	buf.WriteString("\n\n")
+
+	buf.WriteString("## Group by category\n\n")
+	sort.Strings(cats)
+	for i := 0; i < len(cats); i++ {
+		cat := cats[i]
+		var s, t int64
+		tuples := catReg[cat]
+		sort.Slice(tuples, func(i, j int) bool {
+			return tuples[i].difficulty < tuples[j].difficulty
+		})
+		for j := 0; j < len(tuples); j++ {
+			t++
+			if tuples[j].ok {
+				s++
+			}
+		}
+		buf.WriteString("### ").
+			WriteString(cat).
+			WriteString(" (").
+			WriteInt(s).
+			WriteByte('/').
+			WriteInt(t).
+			WriteString(")\n\n").
+			WriteString("| Name | Difficulty |\n").
+			WriteString("| --- | --- |\n")
+		for j := 0; j < len(tuples); j++ {
+			buf.WriteString("| ")
+			tpl := tuples[j]
+			buf.WriteByteIf(tpl.ok, '[').
+				WriteString(tpl.name).
+				WriteStringIf(tpl.ok, "](").
+				WriteStringIf(tpl.ok, tpl.slug).
+				WriteByteIf(tpl.ok, ')')
+			buf.WriteString(" | ")
+			buf.WriteString(difficulty[tpl.difficulty])
+			buf.WriteString(" |\n")
+		}
+		buf.WriteString("\n\n")
+	}
+
+	b = buf.Bytes()
+	return
 }
 
 func composeReadme(vec vector.Interface) (b []byte, err error) {
@@ -211,7 +358,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 		Write(vec.DotBytes("name")).
 		WriteString("\n\n").
 		WriteString("Category: ").WriteString(vec.DotString("category")).WriteString("\n\n").
-		WriteString("Difficulty: ").WriteString(difficulty[int(d)]).WriteString("\n\n").
+		WriteString("Difficulty: ").WriteString(difficulty[d]).WriteString("\n\n").
 		WriteString("## Description\n\n").
 		WriteString(prompt).
 		WriteString("\n").
