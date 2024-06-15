@@ -49,13 +49,13 @@ var (
 	bCP  = []byte("</p>")
 	bNSS = []byte("\n  ")
 
-	reComment  = regexp.MustCompile(`<span class="[^"]+">(.*)</span>`)
+	reComment  = regexp.MustCompile(`<span class="[^"]+">(.*|[\s\S]*?)</span>`)
 	reP        = regexp.MustCompile(`<p>\n([^<]+)</p>`)
 	reH3       = regexp.MustCompile(`<h3>(.*)</h3>`)
 	reUL       = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
 	reLI       = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
 	reNormPre  = regexp.MustCompile(`(<pre>)([^\n])`)
-	reNormCPre = regexp.MustCompile(`([^\n])(</pre>)`)
+	reNormCPre = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
 
 	auth = flag.String("auth", "", "authorization cookie string")
 )
@@ -82,9 +82,9 @@ func main() {
 	var c, f int
 	root.Get("questions").Each(func(idx int, node *vector.Node) {
 		uid := node.GetString("uid")
-		// if uid != "find-kth-largest-value-in-bst" { // todo remove me
-		// 	return
-		// }
+		if uid != "colliding-asteroids" { // todo remove me
+			return
+		}
 		qRaw, err := dlQuestion(uid)
 		if err != nil {
 			f++
@@ -192,8 +192,8 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 
 	prompt = reP.ReplaceAllString(prompt, "$1")
 	prompt = reH3.ReplaceAllString(prompt, "\n### $1")
-	prompt = reNormPre.ReplaceAllString(prompt, "$1\n$2")
-	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n$2")
+	prompt = reNormPre.ReplaceAllString(prompt, "<pre>\n$2")
+	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n</pre>")
 	prompt = reLI.ReplaceAllString(prompt, "\n* $1")
 	prompt = reUL.ReplaceAllString(prompt, "$1\n")
 	prompt = strings.ReplaceAll(prompt, "<pre>", "```")

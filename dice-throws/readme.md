@@ -24,15 +24,15 @@ no possible dice-roll combination that sums up to the
   
 ### Sample Input
   ```
-umDice = 2
+numDice = 2
 numSides = 6
-target = 
+target = 7
 ```
   
 ### Sample Output
   ```
-6 <span class="CodeEditor-promptComment">// [1, 6], [2, 5], [3, 4], [4, 3], [5, 2], [6, 1]
-`
+6 // [1, 6], [2, 5], [3, 4], [4, 3], [5, 2], [6, 1]
+
 ```
 
 ## Optimal Space & Time Complexity

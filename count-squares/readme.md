@@ -21,7 +21,7 @@ origin.
 
 ### Sample Input
 ```
-oints = [
+points = [
   [1, 1],
   [0, 0],
   [-4, 2],
@@ -29,12 +29,12 @@ oints = [
   [0, 1],
   [1, 0],
   [-1, 4]
-
+]
 ```
 
 ### Sample Output
 ```
- <span class="CodeEditor-promptComment"> // [1, 1], [0, 0], [0, 1], and [1, 0] makes a square,
+2  // [1, 1], [0, 0], [0, 1], and [1, 0] makes a square,
 // as does [1, 1], [-4, 2], [-2, -1], and [-1, 4]
 ```
 ## Optimal Space & Time Complexity

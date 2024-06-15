@@ -26,17 +26,17 @@ an array of integers representing the asteroids after all collisions occur.
 
 ### Sample Input
 ```
-steroids = [-3, 5, -8, 6, 7, -4, -7]
+asteroids = [-3, 5, -8, 6, 7, -4, -7]
 ```
 
 ### Sample Output
 ```
--3, -8, 6] <span class="CodeEditor-promptComment">// The -3 moves left, having no collisions.
+[-3, -8, 6] // The -3 moves left, having no collisions.
 // The 5 moves right, colliding with the -8 and being destroyed by it.
 // The 6 never collides with another asteroid.
 // The 7 first collides with the -4, destroying it.
 // The 7 and the -7 then collide, both being destroyed.
-`
+
 ```
 ## Optimal Space & Time Complexity
 
