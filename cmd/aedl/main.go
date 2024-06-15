@@ -53,6 +53,7 @@ var (
 	reP        = regexp.MustCompile(`<p>\n([^<]+)</p>`)
 	reH3       = regexp.MustCompile(`<h3>(.*)</h3>`)
 	reUL       = regexp.MustCompile(`(?s)<ul>[\n\s]*(.*)[\n\s]*<\/ul>`)
+	reOL       = regexp.MustCompile(`(?s)<ol>[\n\s]*(.*)[\n\s]*<\/ol>`)
 	reLI       = regexp.MustCompile(`\s*<li>[\n\s]*(.*|[\s\S]*?)[\n\s]*<\/li>\s*`)
 	reNormPre  = regexp.MustCompile(`(<pre>)([^\n])`)
 	reNormCPre = regexp.MustCompile(`([^\n])(</pre[\n\s]*>)`)
@@ -200,6 +201,7 @@ func composeReadme(vec vector.Interface) (b []byte, err error) {
 	prompt = reNormCPre.ReplaceAllString(prompt, "$1\n</pre>")
 	prompt = reLI.ReplaceAllString(prompt, "\n* $1")
 	prompt = reUL.ReplaceAllString(prompt, "$1\n")
+	prompt = reOL.ReplaceAllString(prompt, "$1\n")
 	prompt = strings.ReplaceAll(prompt, "<pre>", "```")
 	prompt = strings.ReplaceAll(prompt, `</pre>`, "```")
 

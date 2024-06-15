@@ -22,10 +22,10 @@ reach the bottom right corner when starting at the top left corner:
 |_|_|
 |_|_|
 ```
-<ol>
 * Down, Down, Right
 * Right, Down, Down
-* Down, Right, Down</ol>
+* Down, Right, Down
+
 Note: you may assume that `width * height >= 2`. In other words,
 the graph will never be a 1x1 grid.
 
